@@ -4,6 +4,8 @@
  */
 package sistemaqr;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
@@ -25,7 +27,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     
     
-    
+    public void Salir() {
+        int respuesta = JOptionPane.showConfirmDialog(null,
+                "¿Desea salir del sistema?", "Salir", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
     
     
     
@@ -58,8 +66,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmnAyuda = new javax.swing.JMenu();
         jmiAcercaDe = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sistema de Lectura QR - Configuración de Equipos");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jlblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jlblTitulo.setText("Sistema de Lectura y Procesamiento de Códigos QR");
@@ -72,6 +85,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmnArchivo.setText("Archivo");
 
         jmiSalir.setText("Salir");
+        jmiSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiSalirActionPerformed(evt);
+            }
+        });
         jmnArchivo.add(jmiSalir);
 
         jMenuBar1.add(jmnArchivo);
@@ -104,8 +122,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jmnReportes);
 
         jmnAyuda.setText("Ayuda");
+        jmnAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmnAyudaActionPerformed(evt);
+            }
+        });
 
         jmiAcercaDe.setText("Acerca de");
+        jmiAcercaDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiAcercaDeActionPerformed(evt);
+            }
+        });
         jmnAyuda.add(jmiAcercaDe);
 
         jMenuBar1.add(jmnAyuda);
@@ -143,6 +171,28 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jmiSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSalirActionPerformed
+        Salir();
+    }//GEN-LAST:event_jmiSalirActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Salir();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jmnAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmnAyudaActionPerformed
+        
+    }//GEN-LAST:event_jmnAyudaActionPerformed
+
+    private void jmiAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAcercaDeActionPerformed
+        JOptionPane.showMessageDialog(null,
+                "Sistema de Lectura y Procesamiento de Códigos QR\n"
+                + "para Configuración de Equipos\n\n"
+                + "Integrantes:\n"
+                + "Paola Taipe\nDiana Tituaña\nAlina Ortiz\nJulio Zurita\nRobert M\n\n"
+                + "Universidad Técnica de Ambato - FISEI - Software",
+                "Acerca de", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jmiAcercaDeActionPerformed
 
     /**
      * @param args the command line arguments
