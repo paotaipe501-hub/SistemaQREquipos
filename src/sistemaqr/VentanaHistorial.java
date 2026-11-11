@@ -5,7 +5,9 @@
 package sistemaqr;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,6 +26,7 @@ public class VentanaHistorial extends javax.swing.JFrame {
         initComponents();
         CargarTablaLecturas();
         MostrarLecturas();
+        ActualizarTotales();
     }
 
     public void CargarTablaLecturas() {
@@ -55,6 +58,15 @@ public class VentanaHistorial extends javax.swing.JFrame {
                 modelo.addRow(dato);
             }
         }
+    }
+
+    public void ActualizarTotales() {
+        Set<Integer> equipos = new HashSet<>();
+        for (Lectura l : listaLecturas) {
+            equipos.add(l.getIdEquipo());
+        }
+        jlblTotal.setText("Total de lecturas: " + listaLecturas.size()
+                + "     Equipos distintos: " + equipos.size());
     }
 
     /**
@@ -141,10 +153,12 @@ public class VentanaHistorial extends javax.swing.JFrame {
 
     private void jbtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnActualizarActionPerformed
         MostrarLecturas();
+        ActualizarTotales();
     }//GEN-LAST:event_jbtnActualizarActionPerformed
 
     private void jtxtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtBuscarKeyReleased
         MostrarLecturas();
+        ActualizarTotales();
     }//GEN-LAST:event_jtxtBuscarKeyReleased
 
     /**
