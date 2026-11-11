@@ -94,4 +94,24 @@ public class DAO {
         e.setMotivoBaja(rs.getString("motivo_baja"));
         return e;
     }
+        // ------------------------------------------------------------ BUSCAR POR ID
+    /** Busca el equipo por su ID (el numero que va dentro del QR). Devuelve null si no existe. */
+    public Equipo buscarEquipoDAO(int idEquipo) {
+        Equipo equipo = null;
+        try {
+            Conexion cn = new Conexion();
+            Connection cc = cn.conectar();
+            String sql = "SELECT * FROM equipo WHERE id_equipo = ?";
+            PreparedStatement psd = cc.prepareStatement(sql);
+            psd.setInt(1, idEquipo);
+            ResultSet rs = psd.executeQuery();
+            if (rs.next()) {
+                equipo = leerEquipo(rs);
+            }
+            cc.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo buscar el equipo: " + ex.getMessage());
+        }
+        return equipo;
+    }
 }
