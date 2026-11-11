@@ -114,4 +114,39 @@ public class DAO {
         }
         return equipo;
     }
+      
+    public boolean updateEquipoDAO(Equipo equipo) {
+        boolean ok = false;
+        try {
+            Conexion cn = new Conexion();
+            Connection cc = cn.conectar();
+            String sql = "UPDATE equipo SET nombre=?, tipo=?, marca=?, modelo=?, numero_serie=?, "
+                    + "ubicacion=?, responsable=?, direccion_ip=?, direccion_mac=?, "
+                    + "sistema_operativo=?, configuracion=? WHERE id_equipo=?";
+            PreparedStatement psd = cc.prepareStatement(sql);
+            psd.setString(1, equipo.getNombre());
+            psd.setString(2, equipo.getTipo());
+            psd.setString(3, equipo.getMarca());
+            psd.setString(4, equipo.getModelo());
+            psd.setString(5, equipo.getNumeroSerie());
+            psd.setString(6, equipo.getUbicacion());
+            psd.setString(7, equipo.getResponsable());
+            psd.setString(8, equipo.getDireccionIp());
+            psd.setString(9, equipo.getDireccionMac());
+            psd.setString(10, equipo.getSistemaOperativo());
+            psd.setString(11, equipo.getConfiguracion());
+            psd.setInt(12, equipo.getIdEquipo());
+            int respuesta = psd.executeUpdate();
+            cc.close();
+            if (respuesta > 0) {
+                ok = true;
+                JOptionPane.showMessageDialog(null, "Se actualizo el equipo con ID " + equipo.getIdEquipo());
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontro el equipo");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo actualizar el equipo: " + ex.getMessage());
+        }
+        return ok;
+    }
 }
