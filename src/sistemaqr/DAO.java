@@ -149,4 +149,47 @@ public class DAO {
         }
         return ok;
     }
+        // ------------------------------------------------------------ DAR DE BAJA
+    public boolean bajaEquipoDAO(int idEquipo, String motivo) {
+        boolean ok = false;
+        try {
+            Conexion cn = new Conexion();
+            Connection cc = cn.conectar();
+            String sql = "UPDATE equipo SET estado='DADO_DE_BAJA', fecha_baja=NOW(), motivo_baja=? "
+                    + "WHERE id_equipo=?";
+            PreparedStatement psd = cc.prepareStatement(sql);
+            psd.setString(1, motivo);
+            psd.setInt(2, idEquipo);
+            int respuesta = psd.executeUpdate();
+            cc.close();
+            if (respuesta > 0) {
+                ok = true;
+                JOptionPane.showMessageDialog(null, "El equipo con ID " + idEquipo + " fue dado de baja");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo dar de baja: " + ex.getMessage());
+        }
+        return ok;
+    }
+
+    public boolean reactivarEquipoDAO(int idEquipo) {
+        boolean ok = false;
+        try {
+            Conexion cn = new Conexion();
+            Connection cc = cn.conectar();
+            String sql = "UPDATE equipo SET estado='ACTIVO', fecha_baja=NULL, motivo_baja=NULL "
+                    + "WHERE id_equipo=?";
+            PreparedStatement psd = cc.prepareStatement(sql);
+            psd.setInt(1, idEquipo);
+            int respuesta = psd.executeUpdate();
+            cc.close();
+            if (respuesta > 0) {
+                ok = true;
+                JOptionPane.showMessageDialog(null, "El equipo con ID " + idEquipo + " fue reactivado");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo reactivar: " + ex.getMessage());
+        }
+        return ok;
+    }
 }
