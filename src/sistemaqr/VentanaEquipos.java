@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,6 +33,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
         MostrarEquipos();
         BotonesInicio();
         InformacionInicio();
+        CargarDatosEditar();
     }
 
     public void CargarTipos() {
@@ -168,6 +171,37 @@ public class VentanaEquipos extends javax.swing.JFrame {
             equipo.setIdEquipo(Integer.parseInt(jtxtId.getText()));
         }
         return equipo;
+    }
+
+    public void CargarDatosEditar() {
+        jtblEquipos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int fila = jtblEquipos.getSelectedRow();
+                if (fila != -1 && !e.getValueIsAdjusting()) {
+                    Equipo equipo = listaEquipos.get(fila);
+                    jtxtId.setText(String.valueOf(equipo.getIdEquipo()));
+                    jtxtNombre.setText(equipo.getNombre());
+                    jcbxTipo.setSelectedItem(equipo.getTipo());
+                    jtxtMarca.setText(equipo.getMarca());
+                    jtxtModelo.setText(equipo.getModelo());
+                    jtxtSerie.setText(equipo.getNumeroSerie());
+                    jtxtSO.setText(equipo.getSistemaOperativo());
+                    jtxtUbicacion.setText(equipo.getUbicacion());
+                    jtxtResponsable.setText(equipo.getResponsable());
+                    jtxtIP.setText(equipo.getDireccionIp());
+                    jtxtMAC.setText(equipo.getDireccionMac());
+                    jtxtaConfiguracion.setText(equipo.getConfiguracion());
+
+                    InformacionInicio();
+                    jbtnNuevo.setEnabled(true);
+                    jbtnGuardar.setEnabled(false);
+                    jbtnEditar.setEnabled(equipo.isActivo());
+                    jbtnEliminar.setEnabled(equipo.isActivo());
+                    jbtnCancelar.setEnabled(true);
+                }
+            }
+        });
     }
 
     /**
