@@ -4,17 +4,47 @@
  */
 package sistemaqr;
 
+import com.github.sarxos.webcam.Webcam;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
 /**
  *
  * @author ASUS
  */
 public class VentanaLecturaQR extends javax.swing.JFrame {
 
+    CamaraQR camara = new CamaraQR();
+    List<Webcam> listaCamaras = new ArrayList<>();
+    Timer timer;
+
     /**
      * Creates new form VentanaLecturaQR
      */
     public VentanaLecturaQR() {
         initComponents();
+        BotonesInicio();
+    }
+
+    public void BotonesInicio() {
+        jbtnBuscarCamaras.setEnabled(true);
+        jbtnIniciar.setEnabled(jcbxCamaras.getItemCount() > 0);
+        jbtnDetener.setEnabled(false);
+        jcbxCamaras.setEnabled(true);
+    }
+
+    public void Detener() {
+        if (timer != null) {
+            timer.stop();
+        }
+        camara.cerrar();
+        jpnlCamara.removeAll();
+        jpnlCamara.revalidate();
+        jpnlCamara.repaint();
+        BotonesInicio();
     }
 
     /**
@@ -40,14 +70,34 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lectura de códigos QR con cámara web");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setText("Cámara:");
 
         jbtnBuscarCamaras.setText("Buscar cámaras");
+        jbtnBuscarCamaras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnBuscarCamarasActionPerformed(evt);
+            }
+        });
 
         jbtnIniciar.setText("Iniciar lectura");
+        jbtnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnIniciarActionPerformed(evt);
+            }
+        });
 
         jbtnDetener.setText("Detener");
+        jbtnDetener.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnDetenerActionPerformed(evt);
+            }
+        });
 
         jpnlCamara.setBorder(javax.swing.BorderFactory.createTitledBorder("Video"));
         jpnlCamara.setLayout(new java.awt.BorderLayout());
@@ -112,6 +162,47 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnBuscarCamarasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBuscarCamarasActionPerformed
+        listaCamaras = camara.listarCamaras();
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+        for (Webcam w : listaCamaras) {
+            modelo.addElement(w.getName());
+        }
+        jcbxCamaras.setModel(modelo);
+        // la cámara de la laptop suele ser la primera; la USB externa, la última
+        if (listaCamaras.size() > 1) {
+            jcbxCamaras.setSelectedIndex(listaCamaras.size() - 1);
+        }
+        if (listaCamaras.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontró ninguna cámara. Conecte la cámara USB.");
+        }
+        BotonesInicio();
+    }//GEN-LAST:event_jbtnBuscarCamarasActionPerformed
+
+    private void jbtnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnIniciarActionPerformed
+        int indice = jcbxCamaras.getSelectedIndex();
+        if (indice == -1) {
+            JOptionPane.showMessageDialog(null, "Primero busque y seleccione una cámara");
+        } else if (camara.abrir(listaCamaras.get(indice))) {
+            jpnlCamara.removeAll();
+            jpnlCamara.add(camara.crearPanelVideo(), java.awt.BorderLayout.CENTER);
+            jpnlCamara.revalidate();
+            jbtnIniciar.setEnabled(false);
+            jbtnBuscarCamaras.setEnabled(false);
+            jcbxCamaras.setEnabled(false);
+            jbtnDetener.setEnabled(true);
+            jlblEstado.setText("Cámara activa: acerque el código QR del equipo");
+        }
+    }//GEN-LAST:event_jbtnIniciarActionPerformed
+
+    private void jbtnDetenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDetenerActionPerformed
+        Detener();
+    }//GEN-LAST:event_jbtnDetenerActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        Detener();
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
