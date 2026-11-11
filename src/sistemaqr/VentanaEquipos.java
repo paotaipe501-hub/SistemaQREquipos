@@ -7,6 +7,7 @@ package sistemaqr;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,6 +18,8 @@ public class VentanaEquipos extends javax.swing.JFrame {
 
     DAO dao = new DAO();
     List<Equipo> listaEquipos = new ArrayList<>();
+
+    boolean editando = false;
 
     /**
      * Creates new form VentanaEquipos
@@ -132,6 +135,39 @@ public class VentanaEquipos extends javax.swing.JFrame {
         InformacionInicio();
         BotonesInicio();
         jtblEquipos.clearSelection();
+    }
+
+    public boolean ValidarDatos() {
+        if (jtxtNombre.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre del equipo");
+            jtxtNombre.requestFocus();
+            return false;
+        }
+        if (jcbxTipo.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Seleccione el tipo de equipo");
+            jcbxTipo.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    public Equipo CogerDatos() {
+        Equipo equipo = new Equipo(
+                jtxtNombre.getText().trim(),
+                jcbxTipo.getSelectedItem().toString(),
+                jtxtMarca.getText().trim(),
+                jtxtModelo.getText().trim(),
+                jtxtSerie.getText().trim(),
+                jtxtUbicacion.getText().trim(),
+                jtxtResponsable.getText().trim(),
+                jtxtIP.getText().trim(),
+                jtxtMAC.getText().trim().toUpperCase(),
+                jtxtSO.getText().trim(),
+                jtxtaConfiguracion.getText().trim());
+        if (!jtxtId.getText().isEmpty()) {
+            equipo.setIdEquipo(Integer.parseInt(jtxtId.getText()));
+        }
+        return equipo;
     }
 
     /**
@@ -373,8 +409,18 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jpnlBotones.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
 
         jbtnNuevo.setText("Nuevo");
+        jbtnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnNuevoActionPerformed(evt);
+            }
+        });
 
         jbtnGuardar.setText("Guardar");
+        jbtnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGuardarActionPerformed(evt);
+            }
+        });
 
         jbtnEditar.setText("Editar");
 
@@ -479,6 +525,23 @@ public class VentanaEquipos extends javax.swing.JFrame {
     private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed
         CancelarDatos();
     }//GEN-LAST:event_jbtnCancelarActionPerformed
+
+    private void jbtnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNuevoActionPerformed
+        editando = false;
+        LimpiarDatos();
+        InformacionNuevo();
+    }//GEN-LAST:event_jbtnNuevoActionPerformed
+
+    private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
+        if (ValidarDatos()) {
+            Equipo equipo = CogerDatos();
+            int idNuevo = dao.insertEquipoDAO(equipo);
+            if (idNuevo > 0) {
+                MostrarEquipos();
+                CancelarDatos();
+            }
+        }
+    }//GEN-LAST:event_jbtnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
