@@ -192,4 +192,62 @@ public class DAO {
         }
         return ok;
     }
+        // ------------------------------------------------------------ LECTURAS QR
+    public void insertLecturaDAO(int idEquipo) {
+        try {
+            Conexion cn = new Conexion();
+            Connection cc = cn.conectar();
+            String sql = "INSERT INTO lectura_qr (id_equipo) VALUES(?)";
+            PreparedStatement psd = cc.prepareStatement(sql);
+            psd.setInt(1, idEquipo);
+            psd.executeUpdate();
+            cc.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo registrar la lectura: " + ex.getMessage());
+        }
+    }
+
+    public List<Lectura> selectLecturasDAO() {
+        List<Lectura> lista = new ArrayList<>();
+        try {
+            Conexion cn = new Conexion();
+            Connection cc = cn.conectar();
+            String sql = "SELECT l.id_lectura, l.fecha_lectura, e.id_equipo, e.nombre, e.ubicacion "
+                    + "FROM lectura_qr l INNER JOIN equipo e ON l.id_equipo = e.id_equipo "
+                    + "ORDER BY l.fecha_lectura DESC";
+            PreparedStatement psd = cc.prepareStatement(sql);
+            ResultSet rs = psd.executeQuery();
+            while (rs.next()) {
+                lista.add(new Lectura(
+                        rs.getInt("id_lectura"),
+                        rs.getString("fecha_lectura"),
+                        rs.getInt("id_equipo"),
+                        rs.getString("nombre"),
+                        rs.getString("ubicacion")));
+            }
+            cc.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo consultar las lecturas: " + ex.getMessage());
+        }
+        return lista;
+    }
+
+    public int contarLecturasDAO(int idEquipo) {
+        int cantidad = 0;
+        try {
+            Conexion cn = new Conexion();
+            Connection cc = cn.conectar();
+            String sql = "SELECT COUNT(*) AS cantidad FROM lectura_qr WHERE id_equipo = ?";
+            PreparedStatement psd = cc.prepareStatement(sql);
+            psd.setInt(1, idEquipo);
+            ResultSet rs = psd.executeQuery();
+            if (rs.next()) {
+                cantidad = rs.getInt("cantidad");
+            }
+            cc.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return cantidad;
+    }
 }
