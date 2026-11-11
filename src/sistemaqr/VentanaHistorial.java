@@ -4,17 +4,52 @@
  */
 package sistemaqr;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author USER
  */
 public class VentanaHistorial extends javax.swing.JFrame {
 
+    DAO dao = new DAO();
+    List<Lectura> listaLecturas = new ArrayList<>();
+
     /**
      * Creates new form VentanaHistorial
      */
     public VentanaHistorial() {
         initComponents();
+        CargarTablaLecturas();
+        MostrarLecturas();
+    }
+
+    public void CargarTablaLecturas() {
+        String vectorTitulos[] = {"N.º", "Fecha y hora", "ID equipo", "Equipo", "Ubicación"};
+        DefaultTableModel modelo = new DefaultTableModel(null, vectorTitulos) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        };
+        jtblLecturas.setModel(modelo);
+    }
+
+    public void MostrarLecturas() {
+        DefaultTableModel modelo = (DefaultTableModel) jtblLecturas.getModel();
+        modelo.setRowCount(0);
+        listaLecturas = dao.selectLecturasDAO();
+        for (Lectura l : listaLecturas) {
+            String dato[] = new String[5];
+            dato[0] = String.valueOf(l.getIdLectura());
+            dato[1] = l.getFechaLectura();
+            dato[2] = String.valueOf(l.getIdEquipo());
+            dato[3] = l.getNombre();
+            dato[4] = l.getUbicacion();
+            modelo.addRow(dato);
+        }
     }
 
     /**
@@ -39,6 +74,11 @@ public class VentanaHistorial extends javax.swing.JFrame {
         jLabel1.setText("Buscar:");
 
         jbtnActualizar.setText("Actualizar");
+        jbtnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnActualizarActionPerformed(evt);
+            }
+        });
 
         jtblLecturas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -87,6 +127,10 @@ public class VentanaHistorial extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnActualizarActionPerformed
+        MostrarLecturas();
+    }//GEN-LAST:event_jbtnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
