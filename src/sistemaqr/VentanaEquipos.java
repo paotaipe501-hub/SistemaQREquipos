@@ -4,17 +4,67 @@
  */
 package sistemaqr;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ASUS
  */
 public class VentanaEquipos extends javax.swing.JFrame {
 
+    DAO dao = new DAO();
+    List<Equipo> listaEquipos = new ArrayList<>();
+
     /**
      * Creates new form VentanaEquipos
      */
     public VentanaEquipos() {
         initComponents();
+        CargarTipos();
+        CargarTablaEquipos();
+        MostrarEquipos();
+    }
+
+    public void CargarTipos() {
+        String vectorTipos[] = {"Seleccione..", "Computador de escritorio", "Laptop", "Impresora",
+            "Switch", "Router", "Access Point", "Servidor", "Proyector", "Otro"};
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>(vectorTipos);
+        jcbxTipo.setModel(modelo);
+    }
+
+    public void CargarTablaEquipos() {
+        String vectorTitulos[] = {"ID", "Nombre", "Tipo", "Marca", "Modelo",
+            "Ubicación", "Responsable", "IP", "Estado"};
+        DefaultTableModel modelo = new DefaultTableModel(null, vectorTitulos) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        };
+        jtblEquipos.setModel(modelo);
+    }
+
+    public void MostrarEquipos() {
+        DefaultTableModel modelo = (DefaultTableModel) jtblEquipos.getModel();
+        modelo.setRowCount(0);
+        listaEquipos = dao.selectEquiposDAO(true);
+
+        for (Equipo e : listaEquipos) {
+            String dato[] = new String[9];
+            dato[0] = String.valueOf(e.getIdEquipo());
+            dato[1] = e.getNombre();
+            dato[2] = e.getTipo();
+            dato[3] = e.getMarca();
+            dato[4] = e.getModelo();
+            dato[5] = e.getUbicacion();
+            dato[6] = e.getResponsable();
+            dato[7] = e.getDireccionIp();
+            dato[8] = e.isActivo() ? "Activo" : "Dado de baja";
+            modelo.addRow(dato);
+        }
     }
 
     /**
