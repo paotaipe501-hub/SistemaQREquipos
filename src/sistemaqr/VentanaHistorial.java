@@ -40,15 +40,20 @@ public class VentanaHistorial extends javax.swing.JFrame {
     public void MostrarLecturas() {
         DefaultTableModel modelo = (DefaultTableModel) jtblLecturas.getModel();
         modelo.setRowCount(0);
-        listaLecturas = dao.selectLecturasDAO();
-        for (Lectura l : listaLecturas) {
-            String dato[] = new String[5];
-            dato[0] = String.valueOf(l.getIdLectura());
-            dato[1] = l.getFechaLectura();
-            dato[2] = String.valueOf(l.getIdEquipo());
-            dato[3] = l.getNombre();
-            dato[4] = l.getUbicacion();
-            modelo.addRow(dato);
+        listaLecturas = new ArrayList<>();
+        String filtro = jtxtBuscar.getText().trim().toLowerCase();
+        for (Lectura l : dao.selectLecturasDAO()) {
+            String texto = (l.getIdEquipo() + " " + l.getNombre() + " " + l.getUbicacion()).toLowerCase();
+            if (texto.contains(filtro)) {
+                listaLecturas.add(l);
+                String dato[] = new String[5];
+                dato[0] = String.valueOf(l.getIdLectura());
+                dato[1] = l.getFechaLectura();
+                dato[2] = String.valueOf(l.getIdEquipo());
+                dato[3] = l.getNombre();
+                dato[4] = l.getUbicacion();
+                modelo.addRow(dato);
+            }
         }
     }
 
@@ -72,6 +77,12 @@ public class VentanaHistorial extends javax.swing.JFrame {
         setTitle("Historial de lecturas QR");
 
         jLabel1.setText("Buscar:");
+
+        jtxtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtxtBuscarKeyReleased(evt);
+            }
+        });
 
         jbtnActualizar.setText("Actualizar");
         jbtnActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -131,6 +142,10 @@ public class VentanaHistorial extends javax.swing.JFrame {
     private void jbtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnActualizarActionPerformed
         MostrarLecturas();
     }//GEN-LAST:event_jbtnActualizarActionPerformed
+
+    private void jtxtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtBuscarKeyReleased
+        MostrarLecturas();
+    }//GEN-LAST:event_jtxtBuscarKeyReleased
 
     /**
      * @param args the command line arguments

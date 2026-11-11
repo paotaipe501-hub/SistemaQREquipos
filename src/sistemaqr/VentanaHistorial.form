@@ -66,6 +66,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jtxtBuscar">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jtxtBuscarKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbtnActualizar">
       <Properties>
