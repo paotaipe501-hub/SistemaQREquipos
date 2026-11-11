@@ -26,6 +26,8 @@ public class VentanaEquipos extends javax.swing.JFrame {
         CargarTipos();
         CargarTablaEquipos();
         MostrarEquipos();
+        BotonesInicio();
+        InformacionInicio();
     }
 
     public void CargarTipos() {
@@ -65,6 +67,71 @@ public class VentanaEquipos extends javax.swing.JFrame {
             dato[8] = e.isActivo() ? "Activo" : "Dado de baja";
             modelo.addRow(dato);
         }
+    }
+
+    public void BotonesInicio() {
+        jbtnNuevo.setEnabled(true);
+        jbtnGuardar.setEnabled(false);
+        jbtnEditar.setEnabled(false);
+        jbtnEliminar.setEnabled(false);
+        jbtnCancelar.setEnabled(false);
+    }
+
+    public void InformacionInicio() {
+        jtxtNombre.setEnabled(false);
+        jcbxTipo.setEnabled(false);
+        jtxtMarca.setEnabled(false);
+        jtxtModelo.setEnabled(false);
+        jtxtSerie.setEnabled(false);
+        jtxtSO.setEnabled(false);
+        jtxtUbicacion.setEnabled(false);
+        jtxtResponsable.setEnabled(false);
+        jtxtIP.setEnabled(false);
+        jtxtMAC.setEnabled(false);
+        jtxtaConfiguracion.setEnabled(false);
+    }
+
+    public void InformacionNuevo() {
+        jtxtNombre.setEnabled(true);
+        jcbxTipo.setEnabled(true);
+        jtxtMarca.setEnabled(true);
+        jtxtModelo.setEnabled(true);
+        jtxtSerie.setEnabled(true);
+        jtxtSO.setEnabled(true);
+        jtxtUbicacion.setEnabled(true);
+        jtxtResponsable.setEnabled(true);
+        jtxtIP.setEnabled(true);
+        jtxtMAC.setEnabled(true);
+        jtxtaConfiguracion.setEnabled(true);
+
+        jbtnNuevo.setEnabled(false);
+        jbtnGuardar.setEnabled(true);
+        jbtnEditar.setEnabled(false);
+        jbtnEliminar.setEnabled(false);
+        jbtnCancelar.setEnabled(true);
+        jtxtNombre.requestFocus();
+    }
+
+    public void LimpiarDatos() {
+        jtxtId.setText("");
+        jtxtNombre.setText("");
+        jcbxTipo.setSelectedIndex(0);
+        jtxtMarca.setText("");
+        jtxtModelo.setText("");
+        jtxtSerie.setText("");
+        jtxtSO.setText("");
+        jtxtUbicacion.setText("");
+        jtxtResponsable.setText("");
+        jtxtIP.setText("");
+        jtxtMAC.setText("");
+        jtxtaConfiguracion.setText("");
+    }
+
+    public void CancelarDatos() {
+        LimpiarDatos();
+        InformacionInicio();
+        BotonesInicio();
+        jtblEquipos.clearSelection();
     }
 
     /**
@@ -314,6 +381,11 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jbtnEliminar.setText("Dar de baja");
 
         jbtnCancelar.setText("Cancelar");
+        jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jpnlBotonesLayout = new javax.swing.GroupLayout(jpnlBotones);
         jpnlBotones.setLayout(jpnlBotonesLayout);
@@ -403,6 +475,10 @@ public class VentanaEquipos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed
+        CancelarDatos();
+    }//GEN-LAST:event_jbtnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
