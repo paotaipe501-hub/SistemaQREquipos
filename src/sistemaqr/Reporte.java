@@ -1,8 +1,12 @@
 package sistemaqr;
 
+import java.io.File;
 import java.sql.Connection;
 import java.util.Map;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -36,5 +40,28 @@ public class Reporte {
             JOptionPane.showMessageDialog(null, "No se pudo generar el reporte: " + ex.getMessage());
         }
         return jp;
+    }
+
+   
+    public void exportarPDF(String archivoJrxml, Map<String, Object> parametros, String nombreSugerido) {
+        JasperPrint jp = llenar(archivoJrxml, parametros);
+        if (jp == null) {
+            return;
+        }
+        JFileChooser selector = new JFileChooser();
+        selector.setFileFilter(new FileNameExtensionFilter("Documento PDF", "pdf"));
+        selector.setSelectedFile(new File(nombreSugerido + ".pdf"));
+        if (selector.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String ruta = selector.getSelectedFile().getAbsolutePath();
+            if (!ruta.toLowerCase().endsWith(".pdf")) {
+                ruta = ruta + ".pdf";
+            }
+            try {
+                JasperExportManager.exportReportToPdfFile(jp, ruta);
+                JOptionPane.showMessageDialog(null, "PDF guardado en:\n" + ruta);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "No se pudo guardar el PDF: " + ex.getMessage());
+            }
+        }
     }
 }
