@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -111,6 +112,11 @@ public class VentanaHistorial extends javax.swing.JFrame {
                 "N.º", "Fecha y hora", "ID equipo", "Equipo", "Ubicación"
             }
         ));
+        jtblLecturas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtblLecturasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtblLecturas);
 
         jlblTotal.setFont(jlblTotal.getFont().deriveFont(jlblTotal.getFont().getStyle() | java.awt.Font.BOLD));
@@ -160,6 +166,25 @@ public class VentanaHistorial extends javax.swing.JFrame {
         MostrarLecturas();
         ActualizarTotales();
     }//GEN-LAST:event_jtxtBuscarKeyReleased
+
+    private void jtblLecturasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtblLecturasMouseClicked
+        if (evt.getClickCount() == 2 && jtblLecturas.getSelectedRow() != -1) {
+            Lectura l = listaLecturas.get(jtblLecturas.getSelectedRow());
+            Equipo e = dao.buscarEquipoDAO(l.getIdEquipo());
+            if (e != null) {
+                JOptionPane.showMessageDialog(null,
+                        "ID: " + e.getIdEquipo()
+                        + "\nNombre: " + e.getNombre()
+                        + "\nTipo: " + e.getTipo()
+                        + "\nUbicación: " + e.getUbicacion()
+                        + "\nResponsable: " + e.getResponsable()
+                        + "\nIP: " + e.getDireccionIp()
+                        + "\nEstado: " + (e.isActivo() ? "Activo" : "Dado de baja")
+                        + "\nVeces leído: " + dao.contarLecturasDAO(e.getIdEquipo()),
+                        "Equipo con ID " + e.getIdEquipo(), JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jtblLecturasMouseClicked
 
     /**
      * @param args the command line arguments
