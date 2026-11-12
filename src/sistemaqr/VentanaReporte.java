@@ -4,17 +4,44 @@
  */
 package sistemaqr;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author USER
  */
 public class VentanaReporte extends javax.swing.JFrame {
 
+    DAO dao = new DAO();
+    Reporte reporte = new Reporte();
+
     /**
      * Creates new form VentanaReporte
      */
     public VentanaReporte() {
         initComponents();
+    }
+
+    /** Devuelve el ID escrito si es un numero y el equipo existe; si no, devuelve 0. */
+    public int ValidarId() {
+        int id;
+        try {
+            id = Integer.parseInt(jtxtIdEquipo.getText().trim());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Ingrese un ID válido (solo números)");
+            jtxtIdEquipo.requestFocus();
+            return 0;
+        }
+        Equipo e = dao.buscarEquipoDAO(id);
+        if (e == null) {
+            jlblEquipo.setText(" ");
+            JOptionPane.showMessageDialog(null, "No existe un equipo con ID " + id);
+            return 0;
+        }
+        jlblEquipo.setText("Equipo: " + e.getNombre());
+        return id;
     }
 
     /**
@@ -37,12 +64,28 @@ public class VentanaReporte extends javax.swing.JFrame {
 
         jLabel1.setText("ID del equipo:");
 
+        jtxtIdEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtIdEquipoActionPerformed(evt);
+            }
+        });
+
         jlblEquipo.setFont(jlblEquipo.getFont().deriveFont(jlblEquipo.getFont().getStyle() | java.awt.Font.BOLD));
         jlblEquipo.setText(" ");
 
         jbtnVerReporte.setText("Ver reporte");
+        jbtnVerReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnVerReporteActionPerformed(evt);
+            }
+        });
 
         jbtnExportarPDF.setText("Exportar PDF");
+        jbtnExportarPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnExportarPDFActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,6 +123,28 @@ public class VentanaReporte extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnVerReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnVerReporteActionPerformed
+        int id = ValidarId();
+        if (id > 0) {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("ID_EQUIPO", id);
+            reporte.mostrar("reportes/ReporteEquipo.jrxml", parametros);
+        }
+    }//GEN-LAST:event_jbtnVerReporteActionPerformed
+
+    private void jbtnExportarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExportarPDFActionPerformed
+        int id = ValidarId();
+        if (id > 0) {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("ID_EQUIPO", id);
+            reporte.exportarPDF("reportes/ReporteEquipo.jrxml", parametros, "Reporte_Equipo_ID_" + id);
+        }
+    }//GEN-LAST:event_jbtnExportarPDFActionPerformed
+
+    private void jtxtIdEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtIdEquipoActionPerformed
+        jbtnVerReporte.doClick();
+    }//GEN-LAST:event_jtxtIdEquipoActionPerformed
 
     /**
      * @param args the command line arguments

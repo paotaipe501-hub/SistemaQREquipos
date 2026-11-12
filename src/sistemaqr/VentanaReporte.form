@@ -70,6 +70,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jtxtIdEquipo">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtxtIdEquipoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jlblEquipo">
       <Properties>
@@ -85,11 +88,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Ver reporte"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnVerReporteActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbtnExportarPDF">
       <Properties>
         <Property name="text" type="java.lang.String" value="Exportar PDF"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnExportarPDFActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
