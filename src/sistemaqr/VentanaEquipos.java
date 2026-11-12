@@ -457,6 +457,11 @@ public class VentanaEquipos extends javax.swing.JFrame {
         });
 
         jbtnEditar.setText("Editar");
+        jbtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEditarActionPerformed(evt);
+            }
+        });
 
         jbtnEliminar.setText("Dar de baja");
 
@@ -569,13 +574,28 @@ public class VentanaEquipos extends javax.swing.JFrame {
     private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
         if (ValidarDatos()) {
             Equipo equipo = CogerDatos();
-            int idNuevo = dao.insertEquipoDAO(equipo);
-            if (idNuevo > 0) {
+            boolean ok;
+            if (editando) {
+                ok = dao.updateEquipoDAO(equipo);
+            } else {
+                ok = dao.insertEquipoDAO(equipo) > 0;
+            }
+            if (ok) {
+                editando = false;
                 MostrarEquipos();
                 CancelarDatos();
             }
         }
     }//GEN-LAST:event_jbtnGuardarActionPerformed
+
+    private void jbtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditarActionPerformed
+        if (jtblEquipos.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Primero selecciona un equipo de la tabla");
+        } else {
+            editando = true;
+            InformacionNuevo();
+        }
+    }//GEN-LAST:event_jbtnEditarActionPerformed
 
     /**
      * @param args the command line arguments
