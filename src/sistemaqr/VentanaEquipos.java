@@ -58,20 +58,26 @@ public class VentanaEquipos extends javax.swing.JFrame {
     public void MostrarEquipos() {
         DefaultTableModel modelo = (DefaultTableModel) jtblEquipos.getModel();
         modelo.setRowCount(0);
-        listaEquipos = dao.selectEquiposDAO(true);
+        listaEquipos = new ArrayList<>();
+        String filtro = jtxtBuscar.getText().trim().toLowerCase();
 
-        for (Equipo e : listaEquipos) {
-            String dato[] = new String[9];
-            dato[0] = String.valueOf(e.getIdEquipo());
-            dato[1] = e.getNombre();
-            dato[2] = e.getTipo();
-            dato[3] = e.getMarca();
-            dato[4] = e.getModelo();
-            dato[5] = e.getUbicacion();
-            dato[6] = e.getResponsable();
-            dato[7] = e.getDireccionIp();
-            dato[8] = e.isActivo() ? "Activo" : "Dado de baja";
-            modelo.addRow(dato);
+        for (Equipo e : dao.selectEquiposDAO(jchkBajas.isSelected())) {
+            String texto = (e.getIdEquipo() + " " + e.getNombre() + " " + e.getTipo() + " "
+                    + e.getUbicacion() + " " + e.getResponsable()).toLowerCase();
+            if (texto.contains(filtro)) {
+                listaEquipos.add(e);
+                String dato[] = new String[9];
+                dato[0] = String.valueOf(e.getIdEquipo());
+                dato[1] = e.getNombre();
+                dato[2] = e.getTipo();
+                dato[3] = e.getMarca();
+                dato[4] = e.getModelo();
+                dato[5] = e.getUbicacion();
+                dato[6] = e.getResponsable();
+                dato[7] = e.getDireccionIp();
+                dato[8] = e.isActivo() ? "Activo" : "Dado de baja";
+                modelo.addRow(dato);
+            }
         }
     }
 
@@ -81,6 +87,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jbtnEditar.setEnabled(false);
         jbtnEliminar.setEnabled(false);
         jbtnCancelar.setEnabled(false);
+        jbtnReactivar.setEnabled(false);
     }
 
     public void InformacionInicio() {
@@ -151,6 +158,18 @@ public class VentanaEquipos extends javax.swing.JFrame {
             jcbxTipo.requestFocus();
             return false;
         }
+        String ip = jtxtIP.getText().trim();
+        if (!ip.isEmpty() && !ip.matches("^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$")) {
+            JOptionPane.showMessageDialog(null, "La IP no es válida. Ejemplo: 192.168.1.10");
+            jtxtIP.requestFocus();
+            return false;
+        }
+        String mac = jtxtMAC.getText().trim();
+        if (!mac.isEmpty() && !mac.matches("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")) {
+            JOptionPane.showMessageDialog(null, "La MAC no es válida. Ejemplo: AA:BB:CC:DD:EE:FF");
+            jtxtMAC.requestFocus();
+            return false;
+        }
         return true;
     }
 
@@ -198,6 +217,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
                     jbtnGuardar.setEnabled(false);
                     jbtnEditar.setEnabled(equipo.isActivo());
                     jbtnEliminar.setEnabled(equipo.isActivo());
+                    jbtnReactivar.setEnabled(!equipo.isActivo());
                     jbtnCancelar.setEnabled(true);
                 }
             }
@@ -245,11 +265,18 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jbtnEditar = new javax.swing.JButton();
         jbtnEliminar = new javax.swing.JButton();
         jbtnCancelar = new javax.swing.JButton();
+        jbtnReactivar = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jtxtBuscar = new javax.swing.JTextField();
         jchkBajas = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtblEquipos = new javax.swing.JTable();
+
+        jtxtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtxtBuscarKeyReleased(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestión de equipos");
@@ -457,13 +484,30 @@ public class VentanaEquipos extends javax.swing.JFrame {
         });
 
         jbtnEditar.setText("Editar");
+        jbtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEditarActionPerformed(evt);
+            }
+        });
 
         jbtnEliminar.setText("Dar de baja");
+        jbtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEliminarActionPerformed(evt);
+            }
+        });
 
         jbtnCancelar.setText("Cancelar");
         jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnCancelarActionPerformed(evt);
+            }
+        });
+
+        jbtnReactivar.setText("Reactivar");
+        jbtnReactivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnReactivarActionPerformed(evt);
             }
         });
 
@@ -473,35 +517,46 @@ public class VentanaEquipos extends javax.swing.JFrame {
             jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnlBotonesLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jbtnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnReactivar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jpnlBotonesLayout.setVerticalGroup(
             jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(jbtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(132, 132, 132)
-                .addComponent(jbtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(jbtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jbtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(jbtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(172, 172, 172)
+                        .addComponent(jbtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtnReactivar)
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         jLabel13.setText("Buscar:");
 
         jchkBajas.setText("Mostrar dados de baja");
+        jchkBajas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkBajasActionPerformed(evt);
+            }
+        });
 
         jScrollPane2.setViewportView(jtblEquipos);
 
@@ -547,7 +602,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jpnlBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(185, 185, 185)
+                                .addGap(141, 141, 141)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jpnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(15, 15, 15))
@@ -569,13 +624,67 @@ public class VentanaEquipos extends javax.swing.JFrame {
     private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
         if (ValidarDatos()) {
             Equipo equipo = CogerDatos();
-            int idNuevo = dao.insertEquipoDAO(equipo);
-            if (idNuevo > 0) {
+            boolean ok;
+            if (editando) {
+                ok = dao.updateEquipoDAO(equipo);
+            } else {
+                ok = dao.insertEquipoDAO(equipo) > 0;
+            }
+            if (ok) {
+                editando = false;
                 MostrarEquipos();
                 CancelarDatos();
             }
         }
     }//GEN-LAST:event_jbtnGuardarActionPerformed
+
+    private void jbtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditarActionPerformed
+        if (jtblEquipos.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Primero selecciona un equipo de la tabla");
+        } else {
+            editando = true;
+            InformacionNuevo();
+        }
+    }//GEN-LAST:event_jbtnEditarActionPerformed
+
+    private void jbtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEliminarActionPerformed
+        if (jtblEquipos.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Primero selecciona el equipo que deseas dar de baja");
+        } else {
+            int id = Integer.parseInt(jtxtId.getText());
+            String motivo = JOptionPane.showInputDialog(null,
+                    "Va a dar de baja el equipo con ID " + id + "\nIngrese el motivo:",
+                    "Dar de baja", JOptionPane.WARNING_MESSAGE);
+            if (motivo != null && !motivo.trim().isEmpty()) {
+                if (dao.bajaEquipoDAO(id, motivo.trim())) {
+                    MostrarEquipos();
+                    CancelarDatos();
+                }
+            } else if (motivo != null) {
+                JOptionPane.showMessageDialog(null, "Debe indicar el motivo de la baja");
+            }
+        }
+    }//GEN-LAST:event_jbtnEliminarActionPerformed
+
+    private void jbtnReactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnReactivarActionPerformed
+        int id = Integer.parseInt(jtxtId.getText());
+        int respuesta = JOptionPane.showConfirmDialog(null,
+                "¿Reactivar el equipo con ID " + id + "?", "Reactivar", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            if (dao.reactivarEquipoDAO(id)) {
+                MostrarEquipos();
+                CancelarDatos();
+            }
+        }
+    }//GEN-LAST:event_jbtnReactivarActionPerformed
+
+    private void jtxtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtBuscarKeyReleased
+        MostrarEquipos();
+    }//GEN-LAST:event_jtxtBuscarKeyReleased
+
+    private void jchkBajasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkBajasActionPerformed
+        MostrarEquipos();
+    }//GEN-LAST:event_jchkBajasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -633,6 +742,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
     private javax.swing.JButton jbtnEliminar;
     private javax.swing.JButton jbtnGuardar;
     private javax.swing.JButton jbtnNuevo;
+    private javax.swing.JButton jbtnReactivar;
     private javax.swing.JComboBox<String> jcbxTipo;
     private javax.swing.JCheckBox jchkBajas;
     private javax.swing.JPanel jpnlBotones;
