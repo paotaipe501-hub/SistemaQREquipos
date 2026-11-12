@@ -158,6 +158,18 @@ public class VentanaEquipos extends javax.swing.JFrame {
             jcbxTipo.requestFocus();
             return false;
         }
+        String ip = jtxtIP.getText().trim();
+        if (!ip.isEmpty() && !ip.matches("^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$")) {
+            JOptionPane.showMessageDialog(null, "La IP no es válida. Ejemplo: 192.168.1.10");
+            jtxtIP.requestFocus();
+            return false;
+        }
+        String mac = jtxtMAC.getText().trim();
+        if (!mac.isEmpty() && !mac.matches("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")) {
+            JOptionPane.showMessageDialog(null, "La MAC no es válida. Ejemplo: AA:BB:CC:DD:EE:FF");
+            jtxtMAC.requestFocus();
+            return false;
+        }
         return true;
     }
 
