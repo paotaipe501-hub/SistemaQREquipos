@@ -464,6 +464,11 @@ public class VentanaEquipos extends javax.swing.JFrame {
         });
 
         jbtnEliminar.setText("Dar de baja");
+        jbtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEliminarActionPerformed(evt);
+            }
+        });
 
         jbtnCancelar.setText("Cancelar");
         jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -596,6 +601,25 @@ public class VentanaEquipos extends javax.swing.JFrame {
             InformacionNuevo();
         }
     }//GEN-LAST:event_jbtnEditarActionPerformed
+
+    private void jbtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEliminarActionPerformed
+        if (jtblEquipos.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Primero selecciona el equipo que deseas dar de baja");
+        } else {
+            int id = Integer.parseInt(jtxtId.getText());
+            String motivo = JOptionPane.showInputDialog(null,
+                    "Va a dar de baja el equipo con ID " + id + "\nIngrese el motivo:",
+                    "Dar de baja", JOptionPane.WARNING_MESSAGE);
+            if (motivo != null && !motivo.trim().isEmpty()) {
+                if (dao.bajaEquipoDAO(id, motivo.trim())) {
+                    MostrarEquipos();
+                    CancelarDatos();
+                }
+            } else if (motivo != null) {
+                JOptionPane.showMessageDialog(null, "Debe indicar el motivo de la baja");
+            }
+        }
+    }//GEN-LAST:event_jbtnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
