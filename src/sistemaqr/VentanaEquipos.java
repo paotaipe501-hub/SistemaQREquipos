@@ -58,20 +58,26 @@ public class VentanaEquipos extends javax.swing.JFrame {
     public void MostrarEquipos() {
         DefaultTableModel modelo = (DefaultTableModel) jtblEquipos.getModel();
         modelo.setRowCount(0);
-        listaEquipos = dao.selectEquiposDAO(true);
+        listaEquipos = new ArrayList<>();
+        String filtro = jtxtBuscar.getText().trim().toLowerCase();
 
-        for (Equipo e : listaEquipos) {
-            String dato[] = new String[9];
-            dato[0] = String.valueOf(e.getIdEquipo());
-            dato[1] = e.getNombre();
-            dato[2] = e.getTipo();
-            dato[3] = e.getMarca();
-            dato[4] = e.getModelo();
-            dato[5] = e.getUbicacion();
-            dato[6] = e.getResponsable();
-            dato[7] = e.getDireccionIp();
-            dato[8] = e.isActivo() ? "Activo" : "Dado de baja";
-            modelo.addRow(dato);
+        for (Equipo e : dao.selectEquiposDAO(jchkBajas.isSelected())) {
+            String texto = (e.getIdEquipo() + " " + e.getNombre() + " " + e.getTipo() + " "
+                    + e.getUbicacion() + " " + e.getResponsable()).toLowerCase();
+            if (texto.contains(filtro)) {
+                listaEquipos.add(e);
+                String dato[] = new String[9];
+                dato[0] = String.valueOf(e.getIdEquipo());
+                dato[1] = e.getNombre();
+                dato[2] = e.getTipo();
+                dato[3] = e.getMarca();
+                dato[4] = e.getModelo();
+                dato[5] = e.getUbicacion();
+                dato[6] = e.getResponsable();
+                dato[7] = e.getDireccionIp();
+                dato[8] = e.isActivo() ? "Activo" : "Dado de baja";
+                modelo.addRow(dato);
+            }
         }
     }
 
@@ -253,6 +259,12 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jchkBajas = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtblEquipos = new javax.swing.JTable();
+
+        jtxtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtxtBuscarKeyReleased(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestión de equipos");
@@ -528,6 +540,11 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jLabel13.setText("Buscar:");
 
         jchkBajas.setText("Mostrar dados de baja");
+        jchkBajas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkBajasActionPerformed(evt);
+            }
+        });
 
         jScrollPane2.setViewportView(jtblEquipos);
 
@@ -648,6 +665,14 @@ public class VentanaEquipos extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jbtnReactivarActionPerformed
+
+    private void jtxtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtBuscarKeyReleased
+        MostrarEquipos();
+    }//GEN-LAST:event_jtxtBuscarKeyReleased
+
+    private void jchkBajasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkBajasActionPerformed
+        MostrarEquipos();
+    }//GEN-LAST:event_jchkBajasActionPerformed
 
     /**
      * @param args the command line arguments
