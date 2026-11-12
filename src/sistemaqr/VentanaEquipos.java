@@ -81,6 +81,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jbtnEditar.setEnabled(false);
         jbtnEliminar.setEnabled(false);
         jbtnCancelar.setEnabled(false);
+        jbtnReactivar.setEnabled(false);
     }
 
     public void InformacionInicio() {
@@ -198,6 +199,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
                     jbtnGuardar.setEnabled(false);
                     jbtnEditar.setEnabled(equipo.isActivo());
                     jbtnEliminar.setEnabled(equipo.isActivo());
+                    jbtnReactivar.setEnabled(!equipo.isActivo());
                     jbtnCancelar.setEnabled(true);
                 }
             }
@@ -245,6 +247,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jbtnEditar = new javax.swing.JButton();
         jbtnEliminar = new javax.swing.JButton();
         jbtnCancelar = new javax.swing.JButton();
+        jbtnReactivar = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jtxtBuscar = new javax.swing.JTextField();
         jchkBajas = new javax.swing.JCheckBox();
@@ -477,36 +480,49 @@ public class VentanaEquipos extends javax.swing.JFrame {
             }
         });
 
+        jbtnReactivar.setText("Reactivar");
+        jbtnReactivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnReactivarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpnlBotonesLayout = new javax.swing.GroupLayout(jpnlBotones);
         jpnlBotones.setLayout(jpnlBotonesLayout);
         jpnlBotonesLayout.setHorizontalGroup(
             jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnlBotonesLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jbtnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jbtnReactivar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jpnlBotonesLayout.setVerticalGroup(
             jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(jbtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(132, 132, 132)
-                .addComponent(jbtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jpnlBotonesLayout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(jbtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jbtnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(jbtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnlBotonesLayout.createSequentialGroup()
+                        .addGap(172, 172, 172)
+                        .addComponent(jbtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtnReactivar)
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         jLabel13.setText("Buscar:");
@@ -557,7 +573,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jpnlBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(185, 185, 185)
+                                .addGap(141, 141, 141)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jpnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(15, 15, 15))
@@ -621,6 +637,18 @@ public class VentanaEquipos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbtnEliminarActionPerformed
 
+    private void jbtnReactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnReactivarActionPerformed
+        int id = Integer.parseInt(jtxtId.getText());
+        int respuesta = JOptionPane.showConfirmDialog(null,
+                "¿Reactivar el equipo con ID " + id + "?", "Reactivar", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            if (dao.reactivarEquipoDAO(id)) {
+                MostrarEquipos();
+                CancelarDatos();
+            }
+        }
+    }//GEN-LAST:event_jbtnReactivarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -677,6 +705,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
     private javax.swing.JButton jbtnEliminar;
     private javax.swing.JButton jbtnGuardar;
     private javax.swing.JButton jbtnNuevo;
+    private javax.swing.JButton jbtnReactivar;
     private javax.swing.JComboBox<String> jcbxTipo;
     private javax.swing.JCheckBox jchkBajas;
     private javax.swing.JPanel jpnlBotones;
