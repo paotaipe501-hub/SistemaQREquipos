@@ -18,15 +18,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
-        
+
     }
-    
+
     public void abrirVentana(javax.swing.JFrame ventana) {
         ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }
-    
-    
+
     public void Salir() {
         int respuesta = JOptionPane.showConfirmDialog(null,
                 "¿Desea salir del sistema?", "Salir", JOptionPane.YES_NO_OPTION);
@@ -34,12 +33,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             System.exit(0);
         }
     }
-    
-    
-    
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -100,6 +94,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmnEquipos.add(jmiGestionEquipos);
 
         jmiEtiquetas.setText("Etiquetas QR");
+        jmiEtiquetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiEtiquetasActionPerformed(evt);
+            }
+        });
         jmnEquipos.add(jmiEtiquetas);
 
         jMenuBar1.add(jmnEquipos);
@@ -181,7 +180,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jmnAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmnAyudaActionPerformed
-        
+
     }//GEN-LAST:event_jmnAyudaActionPerformed
 
     private void jmiAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAcercaDeActionPerformed
@@ -193,6 +192,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 + "Universidad Técnica de Ambato - FISEI - Software",
                 "Acerca de", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jmiAcercaDeActionPerformed
+
+    private void jmiEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiEtiquetasActionPerformed
+        // TODO add your handling code here:
+        VentanaEtiquetasQR ventana = new VentanaEtiquetasQR();
+        ventana.setLocationRelativeTo(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_jmiEtiquetasActionPerformed
 
     /**
      * @param args the command line arguments
