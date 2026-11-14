@@ -7,7 +7,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -21,19 +21,19 @@ import net.sf.jasperreports.view.JasperViewer;
 public class Reporte {
 
 
-    public void mostrar(String archivoJrxml, Map<String, Object> parametros) {
-        JasperPrint jp = llenar(archivoJrxml, parametros);
+    public void mostrar(String archivoJasper, Map<String, Object> parametros) {
+        JasperPrint jp = llenar(archivoJasper, parametros);
         if (jp != null) {
             JasperViewer.viewReport(jp, false);
         }
     }
 
-    private JasperPrint llenar(String archivoJrxml, Map<String, Object> parametros) {
+    private JasperPrint llenar(String archivoJasper, Map<String, Object> parametros) {
         JasperPrint jp = null;
         try {
             Conexion cn = new Conexion();
             Connection cc = cn.conectar();
-            JasperReport jr = JasperCompileManager.compileReport(archivoJrxml);
+            JasperReport jr = (JasperReport) JRLoader.loadObjectFromFile(archivoJasper);
             jp = JasperFillManager.fillReport(jr, parametros, cc);
             cc.close();
         } catch (Exception ex) {
@@ -43,8 +43,8 @@ public class Reporte {
     }
 
    
-    public void exportarPDF(String archivoJrxml, Map<String, Object> parametros, String nombreSugerido) {
-        JasperPrint jp = llenar(archivoJrxml, parametros);
+    public void exportarPDF(String archivoJasper, Map<String, Object> parametros, String nombreSugerido) {
+        JasperPrint jp = llenar(archivoJasper, parametros);
         if (jp == null) {
             return;
         }
