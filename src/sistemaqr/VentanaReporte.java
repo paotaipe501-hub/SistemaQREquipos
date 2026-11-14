@@ -129,7 +129,7 @@ public class VentanaReporte extends javax.swing.JFrame {
         if (id > 0) {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("ID_EQUIPO", id);
-            reporte.mostrar("reportes/ReporteEquipo.jrxml", parametros);
+            reporte.mostrar("src/Reportes/ReporteEquipo.jasper", parametros);
         }
     }//GEN-LAST:event_jbtnVerReporteActionPerformed
 
@@ -138,7 +138,7 @@ public class VentanaReporte extends javax.swing.JFrame {
         if (id > 0) {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("ID_EQUIPO", id);
-            reporte.exportarPDF("reportes/ReporteEquipo.jrxml", parametros, "Reporte_Equipo_ID_" + id);
+            reporte.exportarPDF("src/Reportes/ReporteEquipo.jasper", parametros, "Reporte_Equipo_ID_" + id);
         }
     }//GEN-LAST:event_jbtnExportarPDFActionPerformed
 
