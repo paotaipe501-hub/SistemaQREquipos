@@ -14,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 /**
  * Genera y lee codigos QR con la libreria ZXing.
@@ -70,5 +72,16 @@ public class ServicioQR {
         FontMetrics fm = g.getFontMetrics();
         int x = (ancho - fm.stringWidth(texto)) / 2;
         g.drawString(texto, Math.max(4, x), y);
+    }
+    
+        // ------------------------------------------------------------ GUARDAR
+    public boolean guardarPNG(BufferedImage imagen, File archivo) {
+        try {
+            ImageIO.write(imagen, "png", archivo);
+            return true;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo guardar la imagen: " + ex.getMessage());
+            return false;
+        }
     }
 }
