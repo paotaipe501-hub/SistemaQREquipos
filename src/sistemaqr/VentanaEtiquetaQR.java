@@ -5,11 +5,14 @@
 package sistemaqr;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -75,6 +78,11 @@ public class VentanaEtiquetaQR extends javax.swing.JFrame {
         jlblEtiqueta.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jbtnGuardar.setText("Guardar PNG");
+        jbtnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGuardarActionPerformed(evt);
+            }
+        });
 
         jbtnImprimir.setText("Imprimir");
 
@@ -150,6 +158,25 @@ public class VentanaEtiquetaQR extends javax.swing.JFrame {
             jlblEtiqueta.setIcon(new ImageIcon(etiqueta));
         }
     }//GEN-LAST:event_jbtnGenerarActionPerformed
+
+    private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
+        if (etiqueta == null) {
+            JOptionPane.showMessageDialog(null, "Primero genere la etiqueta");
+        } else {
+            JFileChooser selector = new JFileChooser();
+            selector.setFileFilter(new FileNameExtensionFilter("Imagen PNG", "png"));
+            selector.setSelectedFile(new File("QR_ID_" + equipoActual.getIdEquipo() + ".png"));
+            if (selector.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File archivo = selector.getSelectedFile();
+                if (!archivo.getName().toLowerCase().endsWith(".png")) {
+                    archivo = new File(archivo.getParentFile(), archivo.getName() + ".png");
+                }
+                if (servicio.guardarPNG(etiqueta, archivo)) {
+                    JOptionPane.showMessageDialog(null, "Etiqueta guardada en:\n" + archivo.getAbsolutePath());
+                }
+            }
+        }
+    }//GEN-LAST:event_jbtnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
