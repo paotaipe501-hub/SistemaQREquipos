@@ -17,7 +17,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
+        setSize(900, 600);
         setLocationRelativeTo(null);
+        // la ventana principal ocupa toda la pantalla y las demas se abren centradas encima
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
     }
     
@@ -97,9 +100,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmnEquipos.setText("Equipos");
 
         jmiGestionEquipos.setText("Gestión de equipos");
+        jmiGestionEquipos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiGestionEquiposActionPerformed(evt);
+            }
+        });
         jmnEquipos.add(jmiGestionEquipos);
 
         jmiEtiquetas.setText("Etiquetas QR");
+        jmiEtiquetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiEtiquetasActionPerformed(evt);
+            }
+        });
         jmnEquipos.add(jmiEtiquetas);
 
         jMenuBar1.add(jmnEquipos);
@@ -107,9 +120,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmnLectura.setText("Lectura QR");
 
         jmiLecturaCamara.setText("Lectura con cámara web");
+        jmiLecturaCamara.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiLecturaCamaraActionPerformed(evt);
+            }
+        });
         jmnLectura.add(jmiLecturaCamara);
 
         jmiHistorial.setText("Historial de lecturas");
+        jmiHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiHistorialActionPerformed(evt);
+            }
+        });
         jmnLectura.add(jmiHistorial);
 
         jMenuBar1.add(jmnLectura);
@@ -117,6 +140,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmnReportes.setText("Reportes");
 
         jmiReporteEquipo.setText("Reporte de equipo por ID");
+        jmiReporteEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiReporteEquipoActionPerformed(evt);
+            }
+        });
         jmnReportes.add(jmiReporteEquipo);
 
         jMenuBar1.add(jmnReportes);
@@ -145,28 +173,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jlblIntegrantes, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78)))
-                .addContainerGap(40, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblSubtitulo)
-                .addGap(132, 132, 132))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jlblTitulo)
+                    .addComponent(jlblSubtitulo)
+                    .addComponent(jlblIntegrantes))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jlblTitulo)
                 .addGap(18, 18, 18)
                 .addComponent(jlblSubtitulo)
                 .addGap(34, 34, 34)
                 .addComponent(jlblIntegrantes)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -193,6 +216,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 + "Universidad Técnica de Ambato - FISEI - Software",
                 "Acerca de", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jmiAcercaDeActionPerformed
+
+    private void jmiGestionEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiGestionEquiposActionPerformed
+        abrirVentana(new VentanaEquipos());
+    }//GEN-LAST:event_jmiGestionEquiposActionPerformed
+
+    private void jmiEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiEtiquetasActionPerformed
+        abrirVentana(new VentanaEtiquetaQR());
+    }//GEN-LAST:event_jmiEtiquetasActionPerformed
+
+    private void jmiLecturaCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLecturaCamaraActionPerformed
+        abrirVentana(new VentanaLecturaQR());
+    }//GEN-LAST:event_jmiLecturaCamaraActionPerformed
+
+    private void jmiHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiHistorialActionPerformed
+        abrirVentana(new VentanaHistorial());
+    }//GEN-LAST:event_jmiHistorialActionPerformed
+
+    private void jmiReporteEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiReporteEquipoActionPerformed
+        abrirVentana(new VentanaReporte());
+    }//GEN-LAST:event_jmiReporteEquipoActionPerformed
 
     /**
      * @param args the command line arguments
