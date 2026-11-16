@@ -4,7 +4,10 @@
  */
 package sistemaqr;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.print.Printable;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +88,11 @@ public class VentanaEtiquetaQR extends javax.swing.JFrame {
         });
 
         jbtnImprimir.setText("Imprimir");
+        jbtnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnImprimirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,6 +185,30 @@ public class VentanaEtiquetaQR extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jbtnGuardarActionPerformed
+
+    private void jbtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnImprimirActionPerformed
+        if (etiqueta == null) {
+            JOptionPane.showMessageDialog(null, "Primero genere la etiqueta");
+        } else {
+            PrinterJob trabajo = PrinterJob.getPrinterJob();
+            trabajo.setPrintable((grafico, formato, pagina) -> {
+                if (pagina > 0) {
+                    return Printable.NO_SUCH_PAGE;
+                }
+                Graphics2D g = (Graphics2D) grafico;
+                g.translate(formato.getImageableX(), formato.getImageableY());
+                g.drawImage(etiqueta, 0, 0, null);
+                return Printable.PAGE_EXISTS;
+            });
+            if (trabajo.printDialog()) {
+                try {
+                    trabajo.print();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "No se pudo imprimir: " + ex.getMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_jbtnImprimirActionPerformed
 
     /**
      * @param args the command line arguments
