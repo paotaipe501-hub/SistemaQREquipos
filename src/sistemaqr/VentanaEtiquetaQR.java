@@ -4,9 +4,12 @@
  */
 package sistemaqr;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,6 +19,10 @@ public class VentanaEtiquetaQR extends javax.swing.JFrame {
 
     DAO dao = new DAO();
     List<Equipo> listaEquipos = new ArrayList<>();
+
+    ServicioQR servicio = new ServicioQR();
+    BufferedImage etiqueta = null;
+    Equipo equipoActual = null;
 
     /**
      * Creates new form VentanaEtiquetaQR
@@ -57,6 +64,11 @@ public class VentanaEtiquetaQR extends javax.swing.JFrame {
         jLabel1.setText("Equipo:");
 
         jbtnGenerar.setText("Generar etiqueta");
+        jbtnGenerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGenerarActionPerformed(evt);
+            }
+        });
 
         jlblEtiqueta.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblEtiqueta.setText("Vista previa");
@@ -125,6 +137,19 @@ public class VentanaEtiquetaQR extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGenerarActionPerformed
+        int indice = jcbxEquipos.getSelectedIndex();
+        if (indice <= 0) {
+            JOptionPane.showMessageDialog(null, "Seleccione un equipo");
+        } else {
+            // la posicion 0 es "Seleccione..", por eso se resta 1
+            equipoActual = listaEquipos.get(indice - 1);
+            etiqueta = servicio.generarEtiqueta(equipoActual.getIdEquipo(), equipoActual.getNombre());
+            jlblEtiqueta.setText("");
+            jlblEtiqueta.setIcon(new ImageIcon(etiqueta));
+        }
+    }//GEN-LAST:event_jbtnGenerarActionPerformed
 
     /**
      * @param args the command line arguments
