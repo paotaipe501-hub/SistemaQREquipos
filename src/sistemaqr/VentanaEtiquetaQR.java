@@ -4,17 +4,35 @@
  */
 package sistemaqr;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+
 /**
  *
  * @author ASUS
  */
 public class VentanaEtiquetaQR extends javax.swing.JFrame {
 
+    DAO dao = new DAO();
+    List<Equipo> listaEquipos = new ArrayList<>();
+
     /**
      * Creates new form VentanaEtiquetaQR
      */
     public VentanaEtiquetaQR() {
         initComponents();
+        CargarEquipos();
+    }
+
+    public void CargarEquipos() {
+        listaEquipos = dao.selectEquiposDAO(false);
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+        modelo.addElement("Seleccione..");
+        for (Equipo e : listaEquipos) {
+            modelo.addElement("ID " + e.getIdEquipo() + " - " + e.getNombre());
+        }
+        jcbxEquipos.setModel(modelo);
     }
 
     /**
