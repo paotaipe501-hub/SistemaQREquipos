@@ -4,6 +4,15 @@
  */
 package sistemaqr;
 
+import com.github.sarxos.webcam.Webcam;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
 /**
  *
  * @author USER11
@@ -13,8 +22,68 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
     /**
      * Creates new form VentanaEscanerQR
      */
+    CamaraQR camara = new CamaraQR();
+    ServicioQR servicio = new ServicioQR();
+    List<Webcam> listaCamaras = new ArrayList<>();
+    Timer timer;
+
     public VentanaEscanerQR() {
         initComponents();
+        CargarCamaras();
+        timer = new Timer(300, e -> LeerCuadro());
+    }
+
+    public void CargarCamaras() {
+        listaCamaras = camara.listarCamaras();
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+
+        for (Webcam w : listaCamaras) {
+            modelo.addElement(w.getName());
+        }
+
+        jcbxCamaras.setModel(modelo);
+
+        if (listaCamaras.size() > 1) {
+            jcbxCamaras.setSelectedIndex(listaCamaras.size() - 1);
+        }
+
+        jbtnIniciar.setEnabled(!listaCamaras.isEmpty());
+
+        if (listaCamaras.isEmpty()) {
+            jlblEstado.setText("No se encontró ninguna cámara. Conecte la cámara USB.");
+        }
+
+    }
+
+    public void Detener() {
+        if (timer != null) {
+            timer.stop();
+        }
+        camara.cerrar();
+        jpnlCamara.removeAll();
+        jpnlCamara.revalidate();
+        jpnlCamara.repaint();
+    }
+
+    public void LeerCuadro() {
+        String texto = servicio.leerQR(camara.tomarCuadro());
+        if (texto == null) {
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(texto.trim());
+            EquipoLeido(id);
+        } catch (NumberFormatException ex) {
+            jlblEstado.setText("El QR leído no es de este sistema: " + texto);
+            jlblEstado.setBackground(new Color(255, 220, 160));
+        }
+    }
+
+    public void EquipoLeido(int id) {
+        Toolkit.getDefaultToolkit().beep();
+        jlblEstado.setText("QR leído: equipo con ID " + id);
+        jlblEstado.setBackground(new Color(190, 235, 190));
     }
 
     /**
@@ -38,6 +107,11 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Escanear código QR");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setText("ESCANEAR CODIGO QR");
 
@@ -50,21 +124,21 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
         });
 
         jbtnIniciar.setText("Iniciar");
+        jbtnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnIniciarActionPerformed(evt);
+            }
+        });
 
         jbtnCancelar.setText("Cancelar");
+        jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCancelarActionPerformed(evt);
+            }
+        });
 
         jpnlCamara.setBorder(javax.swing.BorderFactory.createTitledBorder("Video"));
-
-        javax.swing.GroupLayout jpnlCamaraLayout = new javax.swing.GroupLayout(jpnlCamara);
-        jpnlCamara.setLayout(jpnlCamaraLayout);
-        jpnlCamaraLayout.setHorizontalGroup(
-            jpnlCamaraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 386, Short.MAX_VALUE)
-        );
-        jpnlCamaraLayout.setVerticalGroup(
-            jpnlCamaraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 241, Short.MAX_VALUE)
-        );
+        jpnlCamara.setLayout(new java.awt.BorderLayout());
 
         jlblEstado.setText("         Elija la cámara y presione Iniciar");
 
@@ -92,7 +166,7 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(130, 130, 130)
                         .addComponent(jlblEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,7 +183,7 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
                 .addComponent(jpnlCamara, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jlblEstado)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(292, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -142,6 +216,33 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
     private void jcbxCamarasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbxCamarasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbxCamarasActionPerformed
+
+    private void jbtnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnIniciarActionPerformed
+        // TODO add your handling code here:
+        int indice = jcbxCamaras.getSelectedIndex();
+
+if (indice == -1) {
+    JOptionPane.showMessageDialog(this, "No hay ninguna cámara para iniciar");
+} else if (camara.abrir(listaCamaras.get(indice))) {
+    jpnlCamara.removeAll();
+    jpnlCamara.add(camara.crearPanelVideo(), java.awt.BorderLayout.CENTER);
+    jpnlCamara.revalidate();
+    jbtnIniciar.setEnabled(false);
+    jcbxCamaras.setEnabled(false);
+    jlblEstado.setText("Acerque el código QR del equipo a la cámara");
+    timer.start();
+}
+    }//GEN-LAST:event_jbtnIniciarActionPerformed
+
+    private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jbtnCancelarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+         Detener();
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
