@@ -49,6 +49,25 @@ public class VentanaConfigurarEquipo extends javax.swing.JFrame {
         }
     }
 
+    public boolean ValidarConfiguracion() {
+        String ip = jtxtIP.getText().trim();
+        if (!ip.isEmpty() && !ip.matches(
+                "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$")) {
+            JOptionPane.showMessageDialog(this, "La IP no es válida. Ejemplo: 192.168.1.10");
+            jtxtIP.requestFocus();
+            return false;
+        }
+
+        String mac = jtxtMAC.getText().trim();
+        if (!mac.isEmpty() && !mac.matches("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")) {
+            JOptionPane.showMessageDialog(this, "La MAC no es válida. Ejemplo: AA:BB:CC:DD:EE:FF");
+            jtxtMAC.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -106,6 +125,11 @@ public class VentanaConfigurarEquipo extends javax.swing.JFrame {
         });
 
         jbtnCancelar.setText("Cancelar");
+        jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -194,7 +218,22 @@ public class VentanaConfigurarEquipo extends javax.swing.JFrame {
 
     private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
         // TODO add your handling code here:
+        if (equipo != null && ValidarConfiguracion()) {
+    equipo.setDireccionIp(jtxtIP.getText().trim());
+    equipo.setDireccionMac(jtxtMAC.getText().trim().toUpperCase());
+    equipo.setSistemaOperativo(jtxtSO.getText().trim());
+    equipo.setConfiguracion(jtxtaConfiguracion.getText().trim());
+
+    if (dao.updateEquipoDAO(equipo)) {
+        dispose();
+    }
+}
     }//GEN-LAST:event_jbtnGuardarActionPerformed
+
+    private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jbtnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
