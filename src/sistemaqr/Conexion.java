@@ -4,11 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 
-/**
- * Conexion a la base de datos bd_equipos (MySQL de XAMPP).
- *
- * @author Diana Tituaña
- */
+// Conexión a MySQL
 public class Conexion {
 
     public Connection conectar() {

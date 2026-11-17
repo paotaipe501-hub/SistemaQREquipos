@@ -14,13 +14,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
-/**
- * Muestra los reportes de JasperReports (carpeta reportes del proyecto) y los exporta a PDF.
- *
- * @author Diana Tituaña
- */
+// Reportes
 public class Reporte {
-
 
     public void mostrar(String archivoJasper, Map<String, Object> parametros) {
         JasperPrint jp = llenar(archivoJasper, parametros);
@@ -43,7 +38,6 @@ public class Reporte {
         return jp;
     }
 
-   
     private JasperReport cargarReporte(String archivoJasper) throws Exception {
         if (archivoJasper.startsWith("src/")) {
             try (InputStream reporte = Reporte.class.getResourceAsStream(archivoJasper.substring(3))) {

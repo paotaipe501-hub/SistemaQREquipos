@@ -10,18 +10,14 @@ import java.util.Objects;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-/**
- * Acceso a datos del sistema: CRUD de equipos e historial de lecturas QR.
- *
- * @author Diana Tituaña
- */
+// DAO
 public class DAO {
 
-    // ------------------------------------------------------------ INGRESAR Y LISTAR
-    /** Registra el equipo y devuelve el ID que le dio la base de datos (0 si no se pudo). */
+    // CRUD: Crear
     public int insertEquipoDAO(Equipo equipo) {
         int idNuevo = 0;
         try {
+            // Instancia de la conexión
             Conexion cn = new Conexion();
             Connection cc = cn.conectar();
             String sql = "INSERT INTO equipo (nombre, tipo, marca, modelo, numero_serie, ubicacion, "
@@ -54,6 +50,7 @@ public class DAO {
         return idNuevo;
     }
 
+    // CRUD: Leer
     public List<Equipo> selectEquiposDAO(boolean incluirBajas) {
         List<Equipo> lista = new ArrayList<>();
         try {
@@ -76,6 +73,7 @@ public class DAO {
         return lista;
     }
 
+    // Instancia de Equipo
     private Equipo leerEquipo(ResultSet rs) throws Exception {
         Equipo e = new Equipo(
                 rs.getString("nombre"),
@@ -96,8 +94,7 @@ public class DAO {
         e.setMotivoBaja(rs.getString("motivo_baja"));
         return e;
     }
-        // ------------------------------------------------------------ BUSCAR POR ID
-    /** Busca el equipo por su ID (el numero que va dentro del QR). Devuelve null si no existe. */
+    // CRUD: Buscar por ID
     public Equipo buscarEquipoDAO(int idEquipo) {
         Equipo equipo = null;
         try {
@@ -116,7 +113,8 @@ public class DAO {
         }
         return equipo;
     }
-      
+
+    // CRUD: Actualizar
     public boolean updateEquipoDAO(Equipo equipo) {
         int respuesta;
         try (Connection cc = new Conexion().conectar()) {
@@ -179,7 +177,6 @@ public class DAO {
         return respuesta > 0;
     }
 
-    // Devuelve los nombres de los campos que cambiaron, separados por coma ("" si no cambio nada)
     private String camposCambiados(Equipo antes, Equipo ahora) {
         List<String> campos = new ArrayList<>();
         agregarSiCambio(campos, "Nombre", antes.getNombre(), ahora.getNombre());
@@ -196,7 +193,6 @@ public class DAO {
         return String.join(", ", campos);
     }
 
-    // null y "" cuentan como iguales (campo vacio)
     private void agregarSiCambio(List<String> campos, String nombre, String antes, String ahora) {
         if (!Objects.equals(Objects.toString(antes, ""), Objects.toString(ahora, ""))) {
             campos.add(nombre);
@@ -259,7 +255,7 @@ public class DAO {
         return lista;
     }
 
-        // ------------------------------------------------------------ DAR DE BAJA
+    // CRUD: Eliminar (dar de baja)
     public boolean bajaEquipoDAO(int idEquipo, String motivo) {
         boolean ok = false;
         try {
@@ -302,7 +298,6 @@ public class DAO {
         }
         return ok;
     }
-        // ------------------------------------------------------------ LECTURAS QR
     public void insertLecturaDAO(int idEquipo) {
         try {
             Conexion cn = new Conexion();

@@ -15,7 +15,6 @@ desde ahí se puede sacar su **reporte** (JasperReports).
 | Diana Pamela Tituaña Calapiña | Base de datos, conexión, modelo y acceso a datos (DAO) |
 | Alina Ortiz | Gestión de equipos: ingresar, modificar y dar de baja |
 | Julio Zurita | Generación y lectura de códigos QR, etiquetas QR |
-| Robert M | Historial de lecturas y reporte de equipo por ID |
 
 ## Funciones
 
@@ -35,4 +34,4 @@ Java · NetBeans · Swing (JFrame Form) · MySQL (XAMPP) · JasperReports (iRepo
 2. En phpMyAdmin → **Importar**, cargar `basedatos/script_bd.sql` (crea la base `bd_equipos`).
 3. Abrir el proyecto en NetBeans (*File → Open Project*). Las librerías ya están en la carpeta `lib`.
 4. Conectar la cámara web USB y ejecutar con **Run Project**.
-5. Para probar, usar las etiquetas de la carpeta `etiquetas_qr/`.
+5. Para probar, usar las etiquetas de la carpeta `etiquetas_qr/`.

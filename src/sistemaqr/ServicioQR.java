@@ -25,14 +25,10 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import java.util.List;
 
-/**
- * Genera y lee codigos QR con la libreria ZXing.
- *
- * @author Diana Tituaña
- */
+// Servicio QR
 public class ServicioQR {
 
-    // ------------------------------------------------------------ GENERAR
+    // Generar QR
     public BufferedImage generarQR(String texto, int tamanio) {
         BufferedImage imagen = null;
         try {
@@ -47,8 +43,6 @@ public class ServicioQR {
         return imagen;
     }
 
-    // ------------------------------------------------------------ ETIQUETA
-    /** Etiqueta para pegar en el equipo: el QR guarda solo el ID del equipo. */
     public BufferedImage generarEtiqueta(int idEquipo, String nombre) {
         int tam = 300;
         BufferedImage qr = generarQR(String.valueOf(idEquipo), tam);
@@ -81,8 +75,7 @@ public class ServicioQR {
         int x = (ancho - fm.stringWidth(texto)) / 2;
         g.drawString(texto, Math.max(4, x), y);
     }
-    
-        // ------------------------------------------------------------ GUARDAR
+
     public boolean guardarPNG(BufferedImage imagen, File archivo) {
         try {
             ImageIO.write(imagen, "png", archivo);
@@ -92,9 +85,8 @@ public class ServicioQR {
             return false;
         }
     }
-    
-        // ------------------------------------------------------------ LEER
-    /** Devuelve el texto del QR que hay en la imagen, o null si no encuentra ninguno. */
+
+    // Leer QR
     public String leerQR(BufferedImage imagen) {
         if (imagen == null) {
             return null;

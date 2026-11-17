@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-/**
- * Maneja la cámara web USB externa: la lista, la abre, toma cuadros y la cierra.
- *
- * @author Paola Taipe
- */
+// Cámara USB
 public class CamaraQR {
 
     private Webcam camara;
@@ -72,4 +68,4 @@ public class CamaraQR {
     public boolean estaAbierta() {
         return camara != null && camara.isOpen();
     }
-}
+}

@@ -14,6 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class VentanaLeerImagenQR extends javax.swing.JFrame {
 
+    // Instancias: ServicioQR, DAO, Reporte
     private final ServicioQR servicioQR = new ServicioQR();
     private final DAO dao = new DAO();
     private final Reporte reporte = new Reporte();
@@ -62,6 +63,7 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
         jlblImagen.setText("");
     }
 
+    // Lectura QR
     private void procesarQR(String texto) {
         if (texto == null) {
             jlblEstado.setText("La imagen no tiene un código QR legible.");
