@@ -84,10 +84,10 @@
                   <Column editable="false" title="N.º" type="java.lang.Object"/>
                   <Column editable="false" title="Fecha" type="java.lang.Object"/>
                   <Column editable="false" title="ID equipo" type="java.lang.Object"/>
-                  <Column editable="false" title="Equipo" type="java.lang.Object"/>
+                  <Column editable="false" title="Equipo (actual)" type="java.lang.Object"/>
+                  <Column editable="false" title="Qué cambió" type="java.lang.Object"/>
+                  <Column editable="false" title="Nombre anterior" type="java.lang.Object"/>
                   <Column editable="false" title="IP anterior" type="java.lang.Object"/>
-                  <Column editable="false" title="MAC anterior" type="java.lang.Object"/>
-                  <Column editable="false" title="SO anterior" type="java.lang.Object"/>
                 </Table>
               </Property>
             </Properties>
