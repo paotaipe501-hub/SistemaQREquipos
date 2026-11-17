@@ -42,6 +42,8 @@
                       <Component id="jbtnDetener" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jbtnVerReporte" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jbtnConfigurar" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jpnlCamara" min="-2" pref="480" max="-2" attributes="0"/>
@@ -66,6 +68,7 @@
                   <Component id="jbtnIniciar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jbtnDetener" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jbtnVerReporte" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jbtnConfigurar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -177,5 +180,13 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="jbtnConfigurar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Editar configuraci&#xf3;n"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnConfigurarActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>

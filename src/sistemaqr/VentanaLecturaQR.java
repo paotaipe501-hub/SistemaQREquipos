@@ -44,6 +44,7 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
         BotonesInicio();
         jlstLecturas.setModel(modeloLecturas);
         jbtnVerReporte.setEnabled(false);
+        jbtnConfigurar.setEnabled(false);
         timer = new Timer(300, e -> LeerCuadro());
     }
 
@@ -80,12 +81,15 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
         ProcesarQR(texto);
     }
 
-    /** El QR guarda el ID del equipo: se busca y se muestran TODOS sus datos. */
+    /**
+     * El QR guarda el ID del equipo: se busca y se muestran TODOS sus datos.
+     */
     public void ProcesarQR(String texto) {
         Toolkit.getDefaultToolkit().beep();
         String hora = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         idActual = 0;
         jbtnVerReporte.setEnabled(false);
+        jbtnConfigurar.setEnabled(false);
         jtxtaDatos.setText("");
 
         int id;
@@ -107,6 +111,7 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
             MostrarDatos(e);
             idActual = e.getIdEquipo();
             jbtnVerReporte.setEnabled(true);
+            jbtnConfigurar.setEnabled(e.isActivo());
             if (e.isActivo()) {
                 jlblEstado.setText("Equipo identificado: ID " + e.getIdEquipo() + " - " + e.getNombre());
                 jlblEstado.setBackground(new Color(190, 235, 190));
@@ -159,6 +164,7 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
         jlblEstado = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jlstLecturas = new javax.swing.JList<>();
+        jbtnConfigurar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lectura de códigos QR con cámara web");
@@ -213,6 +219,13 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(jlstLecturas);
 
+        jbtnConfigurar.setText("Editar configuración");
+        jbtnConfigurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnConfigurarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -231,7 +244,9 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbtnDetener)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnVerReporte))
+                        .addComponent(jbtnVerReporte)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbtnConfigurar))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jpnlCamara, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
@@ -250,7 +265,8 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
                     .addComponent(jbtnBuscarCamaras)
                     .addComponent(jbtnIniciar)
                     .addComponent(jbtnDetener)
-                    .addComponent(jbtnVerReporte))
+                    .addComponent(jbtnVerReporte)
+                    .addComponent(jbtnConfigurar))
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jpnlCamara, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -317,6 +333,15 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbtnVerReporteActionPerformed
 
+    private void jbtnConfigurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnConfigurarActionPerformed
+        // TODO add your handling code here:
+        if (idActual > 0) {
+            VentanaConfigurarEquipo ventana = new VentanaConfigurarEquipo(idActual);
+            ventana.setLocationRelativeTo(this);
+            ventana.setVisible(true);
+        }
+    }//GEN-LAST:event_jbtnConfigurarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -357,6 +382,7 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtnBuscarCamaras;
+    private javax.swing.JButton jbtnConfigurar;
     private javax.swing.JButton jbtnDetener;
     private javax.swing.JButton jbtnIniciar;
     private javax.swing.JButton jbtnVerReporte;
