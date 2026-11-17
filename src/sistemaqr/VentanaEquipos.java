@@ -36,7 +36,25 @@ public class VentanaEquipos extends javax.swing.JFrame {
         CargarDatosEditar();
     }
 
+    public void SeleccionarEquipoPorId(int id) {
+        jtxtBuscar.setText("");
+        jchkBajas.setSelected(true);
+        MostrarEquipos();
+
+        for (int i = 0; i < listaEquipos.size(); i++) {
+            if (listaEquipos.get(i).getIdEquipo() == id) {
+                jtblEquipos.setRowSelectionInterval(i, i);
+                jtblEquipos.scrollRectToVisible(jtblEquipos.getCellRect(i, 0, true));
+                toFront();
+                return;
+            }
+        }
+
+        JOptionPane.showMessageDialog(null, "No existe un equipo con ID " + id);
+    }
+
     public void CargarTipos() {
+
         String vectorTipos[] = {"Seleccione..", "Computador de escritorio", "Laptop", "Impresora",
             "Switch", "Router", "Access Point", "Servidor", "Proyector", "Otro"};
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>(vectorTipos);
