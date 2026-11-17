@@ -64,6 +64,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmiHistorialConfig = new javax.swing.JMenuItem();
         jmnLectura = new javax.swing.JMenu();
         jmiLecturaCamara = new javax.swing.JMenuItem();
+        jmiLeerImagen = new javax.swing.JMenuItem();
         jmiHistorial = new javax.swing.JMenuItem();
         jmnReportes = new javax.swing.JMenu();
         jmiReporteEquipo = new javax.swing.JMenuItem();
@@ -135,6 +136,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         jmnLectura.add(jmiLecturaCamara);
+
+        jmiLeerImagen.setText("Leer QR desde imagen");
+        jmiLeerImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiLeerImagenActionPerformed(evt);
+            }
+        });
+        jmnLectura.add(jmiLeerImagen);
 
         jmiHistorial.setText("Historial de lecturas");
         jmiHistorial.addActionListener(new java.awt.event.ActionListener() {
@@ -242,6 +251,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         abrirVentana(new VentanaLecturaQR());
     }//GEN-LAST:event_jmiLecturaCamaraActionPerformed
 
+    private void jmiLeerImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLeerImagenActionPerformed
+        abrirVentana(new VentanaLeerImagenQR());
+    }//GEN-LAST:event_jmiLeerImagenActionPerformed
+
     private void jmiHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiHistorialActionPerformed
         abrirVentana(new VentanaHistorial());
     }//GEN-LAST:event_jmiHistorialActionPerformed
@@ -296,6 +309,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiGestionEquipos;
     private javax.swing.JMenuItem jmiHistorial;
     private javax.swing.JMenuItem jmiLecturaCamara;
+    private javax.swing.JMenuItem jmiLeerImagen;
     private javax.swing.JMenuItem jmiReporteEquipo;
     private javax.swing.JMenuItem jmiSalir;
     private javax.swing.JMenu jmnArchivo;
