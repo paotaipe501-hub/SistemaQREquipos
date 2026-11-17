@@ -284,17 +284,12 @@ public class VentanaEquipos extends javax.swing.JFrame {
         jbtnEliminar = new javax.swing.JButton();
         jbtnCancelar = new javax.swing.JButton();
         jbtnReactivar = new javax.swing.JButton();
+        jbtnEscanear = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jtxtBuscar = new javax.swing.JTextField();
         jchkBajas = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtblEquipos = new javax.swing.JTable();
-
-        jtxtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtxtBuscarKeyReleased(evt);
-            }
-        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestión de equipos");
@@ -529,6 +524,13 @@ public class VentanaEquipos extends javax.swing.JFrame {
             }
         });
 
+        jbtnEscanear.setText("Escanear QR");
+        jbtnEscanear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEscanearActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpnlBotonesLayout = new javax.swing.GroupLayout(jpnlBotones);
         jpnlBotones.setLayout(jpnlBotonesLayout);
         jpnlBotonesLayout.setHorizontalGroup(
@@ -541,7 +543,8 @@ public class VentanaEquipos extends javax.swing.JFrame {
                     .addComponent(jbtnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                     .addComponent(jbtnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                     .addComponent(jbtnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                    .addComponent(jbtnReactivar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jbtnReactivar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbtnEscanear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jpnlBotonesLayout.setVerticalGroup(
             jpnlBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -564,10 +567,18 @@ public class VentanaEquipos extends javax.swing.JFrame {
                         .addComponent(jbtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnReactivar)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtnEscanear)
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         jLabel13.setText("Buscar:");
+
+        jtxtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtxtBuscarKeyReleased(evt);
+            }
+        });
 
         jchkBajas.setText("Mostrar dados de baja");
         jchkBajas.addActionListener(new java.awt.event.ActionListener() {
@@ -620,7 +631,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jpnlBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(141, 141, 141)
+                                .addGap(51, 51, 51)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jpnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(15, 15, 15))
@@ -704,6 +715,13 @@ public class VentanaEquipos extends javax.swing.JFrame {
         MostrarEquipos();
     }//GEN-LAST:event_jchkBajasActionPerformed
 
+    private void jbtnEscanearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEscanearActionPerformed
+        // TODO add your handling code here:
+        VentanaEscanerQR escaner = new VentanaEscanerQR(this);
+        escaner.setLocationRelativeTo(this);
+        escaner.setVisible(true);
+    }//GEN-LAST:event_jbtnEscanearActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -758,6 +776,7 @@ public class VentanaEquipos extends javax.swing.JFrame {
     private javax.swing.JButton jbtnCancelar;
     private javax.swing.JButton jbtnEditar;
     private javax.swing.JButton jbtnEliminar;
+    private javax.swing.JButton jbtnEscanear;
     private javax.swing.JButton jbtnGuardar;
     private javax.swing.JButton jbtnNuevo;
     private javax.swing.JButton jbtnReactivar;
