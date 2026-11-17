@@ -1,7 +1,8 @@
 package sistemaqr;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import javax.swing.JOptionPane;
-import java.sql.*;
 
 // Conexión a MySQL
 public class Conexion {
@@ -10,9 +11,15 @@ public class Conexion {
         Connection con = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/bd_equipos", "root", "");
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/bd_equipos"
+                    + "?useSSL=false"
+                    + "&serverTimezone=America/Guayaquil"
+                    + "&allowPublicKeyRetrieval=true",
+                    "root",
+                    "");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, "Error de conexion: " + ex.getMessage());
         }
         return con;
     }
