@@ -1,5 +1,6 @@
 package sistemaqr;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,6 +11,10 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class VentanaLeerImagenQR extends javax.swing.JFrame {
+
+    private final ServicioQR servicioQR = new ServicioQR();
+    private final DAO dao = new DAO();
+    private int idActual;
 
     public VentanaLeerImagenQR() {
         initComponents();
@@ -25,6 +30,9 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
 
         File archivo = selector.getSelectedFile();
         jlblArchivo.setText(archivo.getName());
+        idActual = 0;
+        jtxtaDatos.setText("");
+        jlblEstado.setBackground(javax.swing.UIManager.getColor("Label.background"));
         jlblImagen.setIcon(null);
         jlblImagen.setText("Vista previa");
         try {
@@ -34,6 +42,7 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
                 return;
             }
             mostrarVistaPrevia(imagen);
+            procesarQR(servicioQR.leerQR(imagen));
         } catch (IOException ex) {
             jlblEstado.setText("No se pudo abrir la imagen: " + ex.getMessage());
         }
@@ -47,6 +56,62 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
         Image vista = imagen.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         jlblImagen.setIcon(new ImageIcon(vista));
         jlblImagen.setText("");
+    }
+
+    private void procesarQR(String texto) {
+        if (texto == null) {
+            jlblEstado.setText("La imagen no tiene un código QR legible.");
+            return;
+        }
+
+        int idEquipo;
+        try {
+            idEquipo = Integer.parseInt(texto.trim());
+        } catch (NumberFormatException ex) {
+            jlblEstado.setText("El código QR no contiene un ID válido de equipo.");
+            return;
+        }
+        if (idEquipo <= 0) {
+            jlblEstado.setText("El código QR no contiene un ID válido de equipo.");
+            return;
+        }
+
+        Equipo equipo = dao.buscarEquipoDAO(idEquipo);
+        if (equipo == null) {
+            jlblEstado.setText("No existe un equipo con ID " + idEquipo);
+            return;
+        }
+
+        dao.insertLecturaDAO(equipo.getIdEquipo());
+        idActual = equipo.getIdEquipo();
+        mostrarDatos(equipo);
+        if (equipo.isActivo()) {
+            jlblEstado.setText("Equipo identificado: ID " + idActual + " - " + equipo.getNombre());
+            jlblEstado.setBackground(new Color(190, 235, 190));
+        } else {
+            jlblEstado.setText("ATENCIÓN: el equipo con ID " + idActual + " está DADO DE BAJA");
+            jlblEstado.setBackground(new Color(250, 180, 180));
+        }
+    }
+
+    private void mostrarDatos(Equipo e) {
+        String datos = "ID DEL EQUIPO: " + e.getIdEquipo() + "\n"
+                + "------------------------------------------\n"
+                + "Nombre: " + e.getNombre() + "\n"
+                + "Tipo: " + e.getTipo() + "\n"
+                + "Marca / Modelo: " + e.getMarca() + " " + e.getModelo() + "\n"
+                + "N.º de serie: " + e.getNumeroSerie() + "\n"
+                + "Ubicación: " + e.getUbicacion() + "\n"
+                + "Responsable: " + e.getResponsable() + "\n"
+                + "Dirección IP: " + e.getDireccionIp() + "\n"
+                + "Dirección MAC: " + e.getDireccionMac() + "\n"
+                + "Sistema operativo: " + e.getSistemaOperativo() + "\n"
+                + "Estado: " + (e.isActivo() ? "Activo" : "DADO DE BAJA") + "\n"
+                + "\nCONFIGURACIÓN\n"
+                + "------------------------------------------\n"
+                + e.getConfiguracion();
+        jtxtaDatos.setText(datos);
+        jtxtaDatos.setCaretPosition(0);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
