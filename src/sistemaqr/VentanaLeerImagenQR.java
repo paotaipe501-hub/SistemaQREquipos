@@ -148,7 +148,7 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
         jlblArchivo.setText("Ningún archivo seleccionado");
         jlblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlblImagen.setText("Vista previa");
-        jlblImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jlblImagen.setOpaque(true);
         jtxtaDatos.setEditable(false);
         jtxtaDatos.setLineWrap(true);
         jtxtaDatos.setWrapStyleWord(true);
