@@ -21,12 +21,24 @@
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
   </AuxValues>
 
-  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+        <Component id="filtros" max="32767" attributes="0"/>
+        <Component id="contenido" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+        <Group type="102" attributes="0">
+          <Component id="filtros" min="-2" max="-2" attributes="0"/>
+          <Component id="contenido" max="32767" attributes="0"/>
+        </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="filtros">
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" valueClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraints" direction="North" />
-      </Constraints>
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout" />
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lblId">
@@ -57,9 +69,6 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="contenido">
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" valueClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraints" direction="Center" />
-      </Constraints>
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="rows" type="int" value="2" />
         <Property name="columns" type="int" value="1" />
