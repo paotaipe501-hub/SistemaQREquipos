@@ -14,6 +14,7 @@ public class VentanaConfigurarEquipo extends javax.swing.JFrame {
 
     DAO dao = new DAO();
     Equipo equipo = null;
+    VentanaLecturaQR padre;
 
     /**
      * Creates new form VentanaConfigurarEquipo
@@ -25,6 +26,11 @@ public class VentanaConfigurarEquipo extends javax.swing.JFrame {
     public VentanaConfigurarEquipo(int idEquipo) {
         this();
         CargarEquipo(idEquipo);
+    }
+
+    public VentanaConfigurarEquipo(int idEquipo, VentanaLecturaQR padre) {
+        this(idEquipo);
+        this.padre = padre;
     }
 
     public void CargarEquipo(int idEquipo) {
@@ -219,15 +225,17 @@ public class VentanaConfigurarEquipo extends javax.swing.JFrame {
     private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
         // TODO add your handling code here:
         if (equipo != null && ValidarConfiguracion()) {
-    equipo.setDireccionIp(jtxtIP.getText().trim());
-    equipo.setDireccionMac(jtxtMAC.getText().trim().toUpperCase());
-    equipo.setSistemaOperativo(jtxtSO.getText().trim());
-    equipo.setConfiguracion(jtxtaConfiguracion.getText().trim());
-
-    if (dao.updateEquipoDAO(equipo)) {
-        dispose();
-    }
-}
+            equipo.setDireccionIp(jtxtIP.getText().trim());
+            equipo.setDireccionMac(jtxtMAC.getText().trim().toUpperCase());
+            equipo.setSistemaOperativo(jtxtSO.getText().trim());
+            equipo.setConfiguracion(jtxtaConfiguracion.getText().trim());
+            if (dao.updateEquipoDAO(equipo)) {
+                if (padre != null) {
+                    padre.ActualizarDatos(equipo.getIdEquipo());
+                }
+                dispose();
+            }
+        }
     }//GEN-LAST:event_jbtnGuardarActionPerformed
 
     private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed

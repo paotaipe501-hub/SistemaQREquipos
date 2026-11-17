@@ -143,6 +143,17 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
         jtxtaDatos.setCaretPosition(0);
     }
 
+    public void ActualizarDatos(int idEquipo) {
+        Equipo e = dao.buscarEquipoDAO(idEquipo);
+
+        if (e != null) {
+            MostrarDatos(e);
+            jlblEstado.setText("Configuración actualizada: ID "
+                    + e.getIdEquipo() + " - " + e.getNombre());
+            jlblEstado.setBackground(new Color(190, 235, 190));
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -336,7 +347,7 @@ public class VentanaLecturaQR extends javax.swing.JFrame {
     private void jbtnConfigurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnConfigurarActionPerformed
         // TODO add your handling code here:
         if (idActual > 0) {
-            VentanaConfigurarEquipo ventana = new VentanaConfigurarEquipo(idActual);
+            VentanaConfigurarEquipo ventana = new VentanaConfigurarEquipo(idActual, this);
             ventana.setLocationRelativeTo(this);
             ventana.setVisible(true);
         }
