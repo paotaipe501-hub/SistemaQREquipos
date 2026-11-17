@@ -1,10 +1,6 @@
 package sistemaqr;
 
-/**
- * Una lectura de codigo QR registrada en la tabla lectura_qr.
- *
- * @author Diana Tituaña
- */
+// Modelo
 public class Lectura {
 
     private int idLectura;
@@ -26,4 +22,4 @@ public class Lectura {
     public int getIdEquipo() { return idEquipo; }
     public String getNombre() { return nombre; }
     public String getUbicacion() { return ubicacion; }
-}
+}

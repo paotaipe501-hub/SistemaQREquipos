@@ -1,10 +1,6 @@
 package sistemaqr;
 
-/**
- * Equipo de la tabla equipo. Su ID es lo que va dentro del codigo QR.
- *
- * @author Diana Tituaña
- */
+// Modelo (encapsulamiento)
 public class Equipo {
 
     private int idEquipo;
@@ -101,4 +97,4 @@ public class Equipo {
     public String toString() {
         return idEquipo + " - " + nombre;
     }
-}
+}

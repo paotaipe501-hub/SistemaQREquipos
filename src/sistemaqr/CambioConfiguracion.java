@@ -1,6 +1,6 @@
 package sistemaqr;
 
-/** Datos anteriores de un equipo, registrados al guardar un cambio. */
+// Modelo
 public record CambioConfiguracion(
         int idHistorial,
         int idEquipo,

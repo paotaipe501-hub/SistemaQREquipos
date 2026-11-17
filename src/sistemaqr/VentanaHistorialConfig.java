@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class VentanaHistorialConfig extends javax.swing.JFrame {
+    // Instancias: DAO
     private final DAO dao = new DAO();
     private List<CambioConfiguracion> cambios = List.of();
 
