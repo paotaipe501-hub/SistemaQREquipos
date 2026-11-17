@@ -10,6 +10,71 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
 
     public VentanaHistorialConfig() {
         initComponents();
+        tabla.setModel(new DefaultTableModel(new String[] {
+            "N.º", "Fecha", "ID equipo", "Equipo", "IP anterior", "MAC anterior", "SO anterior"
+        }, 0) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        });
+        btnBuscar.addActionListener(e -> buscarPorId());
+        btnTodos.addActionListener(e -> verTodos());
+        txtId.addActionListener(e -> buscarPorId());
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                mostrarDetalle();
+            }
+        });
+        mostrarCambios(0);
+    }
+
+    private void buscarPorId() {
+        try {
+            int id = Integer.parseInt(txtId.getText().trim());
+            if (id <= 0) {
+                throw new NumberFormatException();
+            }
+            mostrarCambios(id);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Escriba un ID de equipo mayor que cero");
+        }
+    }
+
+    private void verTodos() {
+        txtId.setText("");
+        mostrarCambios(0);
+    }
+
+    private void mostrarCambios(int idEquipo) {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+        tabla.clearSelection();
+        modelo.setRowCount(0);
+        cambios = dao.selectHistorialDAO(idEquipo);
+        for (CambioConfiguracion cambio : cambios) {
+            modelo.addRow(new Object[] {
+                cambio.idHistorial(), cambio.fechaCambio(), cambio.idEquipo(), cambio.nombreEquipo(),
+                cambio.direccionIp(), cambio.direccionMac(), cambio.sistemaOperativo()
+            });
+        }
+        lblTotal.setText("Cambios: " + cambios.size());
+        detalle.setText("");
+    }
+
+    private void mostrarDetalle() {
+        int fila = tabla.getSelectedRow();
+        if (fila < 0) {
+            detalle.setText("");
+            return;
+        }
+        CambioConfiguracion cambio = cambios.get(tabla.convertRowIndexToModel(fila));
+        detalle.setText("Equipo: " + cambio.nombreEquipo() + " (ID " + cambio.idEquipo() + ")\n"
+                + "Fecha del cambio: " + cambio.fechaCambio() + "\n"
+                + "IP anterior: " + java.util.Objects.toString(cambio.direccionIp(), "") + "\n"
+                + "MAC anterior: " + java.util.Objects.toString(cambio.direccionMac(), "") + "\n"
+                + "Sistema operativo anterior: " + java.util.Objects.toString(cambio.sistemaOperativo(), "")
+                + "\n\nConfiguración anterior\n" + java.util.Objects.toString(cambio.configuracion(), ""));
+        detalle.setCaretPosition(0);
     }
 
     @SuppressWarnings("unchecked")
