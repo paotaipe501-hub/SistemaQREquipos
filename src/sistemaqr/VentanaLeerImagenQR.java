@@ -5,6 +5,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -14,6 +16,7 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
 
     private final ServicioQR servicioQR = new ServicioQR();
     private final DAO dao = new DAO();
+    private final Reporte reporte = new Reporte();
     private int idActual;
 
     public VentanaLeerImagenQR() {
@@ -31,6 +34,7 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
         File archivo = selector.getSelectedFile();
         jlblArchivo.setText(archivo.getName());
         idActual = 0;
+        jbtnVerReporte.setEnabled(false);
         jtxtaDatos.setText("");
         jlblEstado.setBackground(javax.swing.UIManager.getColor("Label.background"));
         jlblImagen.setIcon(null);
@@ -85,6 +89,7 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
         dao.insertLecturaDAO(equipo.getIdEquipo());
         idActual = equipo.getIdEquipo();
         mostrarDatos(equipo);
+        jbtnVerReporte.setEnabled(true);
         if (equipo.isActivo()) {
             jlblEstado.setText("Equipo identificado: ID " + idActual + " - " + equipo.getNombre());
             jlblEstado.setBackground(new Color(190, 235, 190));
@@ -112,6 +117,14 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
                 + e.getConfiguracion();
         jtxtaDatos.setText(datos);
         jtxtaDatos.setCaretPosition(0);
+    }
+
+    private void mostrarReporte() {
+        if (idActual > 0) {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("ID_EQUIPO", idActual);
+            reporte.mostrar("src/Reportes/ReporteEquipo.jasper", parametros);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -144,6 +157,11 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
         jlblEstado.setOpaque(true);
         jbtnVerReporte.setText("Ver reporte");
         jbtnVerReporte.setEnabled(false);
+        jbtnVerReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnVerReporteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,6 +191,10 @@ public class VentanaLeerImagenQR extends javax.swing.JFrame {
     private void jbtnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSeleccionarActionPerformed
         seleccionarImagen();
     }//GEN-LAST:event_jbtnSeleccionarActionPerformed
+
+    private void jbtnVerReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnVerReporteActionPerformed
+        mostrarReporte();
+    }//GEN-LAST:event_jbtnVerReporteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jbtnSeleccionar;
