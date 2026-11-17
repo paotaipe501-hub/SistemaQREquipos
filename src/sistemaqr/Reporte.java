@@ -1,6 +1,7 @@
 package sistemaqr;
 
 import java.io.File;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Map;
 import javax.swing.JFileChooser;
@@ -33,7 +34,7 @@ public class Reporte {
         try {
             Conexion cn = new Conexion();
             Connection cc = cn.conectar();
-            JasperReport jr = (JasperReport) JRLoader.loadObjectFromFile(archivoJasper);
+            JasperReport jr = cargarReporte(archivoJasper);
             jp = JasperFillManager.fillReport(jr, parametros, cc);
             cc.close();
         } catch (Exception ex) {
@@ -43,6 +44,17 @@ public class Reporte {
     }
 
    
+    private JasperReport cargarReporte(String archivoJasper) throws Exception {
+        if (archivoJasper.startsWith("src/")) {
+            try (InputStream reporte = Reporte.class.getResourceAsStream(archivoJasper.substring(3))) {
+                if (reporte != null) {
+                    return (JasperReport) JRLoader.loadObject(reporte);
+                }
+            }
+        }
+        return (JasperReport) JRLoader.loadObjectFromFile(archivoJasper);
+    }
+
     public void exportarPDF(String archivoJasper, Map<String, Object> parametros, String nombreSugerido) {
         JasperPrint jp = llenar(archivoJasper, parametros);
         if (jp == null) {
