@@ -37,6 +37,18 @@ fecha_lectura DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 CONSTRAINT fk_lectura_equipo FOREIGN KEY (id_equipo)
 REFERENCES equipo(id_equipo)
 );
+-- Historial de cambios de configuración
+CREATE TABLE IF NOT EXISTS historial_configuracion (
+    id_historial INT AUTO_INCREMENT PRIMARY KEY,
+    id_equipo INT NOT NULL,
+    fecha_cambio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    direccion_ip VARCHAR(15),
+    direccion_mac VARCHAR(17),
+    sistema_operativo VARCHAR(60),
+    configuracion TEXT,
+    CONSTRAINT fk_historial_equipo FOREIGN KEY (id_equipo) REFERENCES equipo(id_equipo)
+);
+
 -- ---------------------------------------------------------------------
 -- Equipos de prueba (IGNORE: si ya existen, no se duplican)
 -- ---------------------------------------------------------------------

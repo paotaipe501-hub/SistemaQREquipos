@@ -61,6 +61,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jmnEquipos = new javax.swing.JMenu();
         jmiGestionEquipos = new javax.swing.JMenuItem();
         jmiEtiquetas = new javax.swing.JMenuItem();
+        jmiHistorialConfig = new javax.swing.JMenuItem();
         jmnLectura = new javax.swing.JMenu();
         jmiLecturaCamara = new javax.swing.JMenuItem();
         jmiHistorial = new javax.swing.JMenuItem();
@@ -114,6 +115,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         jmnEquipos.add(jmiEtiquetas);
+
+        jmiHistorialConfig.setText("Historial de configuración");
+        jmiHistorialConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiHistorialConfigActionPerformed(evt);
+            }
+        });
+        jmnEquipos.add(jmiHistorialConfig);
 
         jMenuBar1.add(jmnEquipos);
 
@@ -221,6 +230,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         abrirVentana(new VentanaEquipos());
     }//GEN-LAST:event_jmiGestionEquiposActionPerformed
 
+    private void jmiHistorialConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiHistorialConfigActionPerformed
+        abrirVentana(new VentanaHistorialConfig());
+    }//GEN-LAST:event_jmiHistorialConfigActionPerformed
+
     private void jmiEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiEtiquetasActionPerformed
         abrirVentana(new VentanaEtiquetaQR());
     }//GEN-LAST:event_jmiEtiquetasActionPerformed
@@ -279,6 +292,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jlblTitulo;
     private javax.swing.JMenuItem jmiAcercaDe;
     private javax.swing.JMenuItem jmiEtiquetas;
+    private javax.swing.JMenuItem jmiHistorialConfig;
     private javax.swing.JMenuItem jmiGestionEquipos;
     private javax.swing.JMenuItem jmiHistorial;
     private javax.swing.JMenuItem jmiLecturaCamara;

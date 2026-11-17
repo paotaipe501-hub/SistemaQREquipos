@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -116,39 +118,116 @@ public class DAO {
     }
       
     public boolean updateEquipoDAO(Equipo equipo) {
-        boolean ok = false;
-        try {
-            Conexion cn = new Conexion();
-            Connection cc = cn.conectar();
-            String sql = "UPDATE equipo SET nombre=?, tipo=?, marca=?, modelo=?, numero_serie=?, "
-                    + "ubicacion=?, responsable=?, direccion_ip=?, direccion_mac=?, "
-                    + "sistema_operativo=?, configuracion=? WHERE id_equipo=?";
-            PreparedStatement psd = cc.prepareStatement(sql);
-            psd.setString(1, equipo.getNombre());
-            psd.setString(2, equipo.getTipo());
-            psd.setString(3, equipo.getMarca());
-            psd.setString(4, equipo.getModelo());
-            psd.setString(5, equipo.getNumeroSerie());
-            psd.setString(6, equipo.getUbicacion());
-            psd.setString(7, equipo.getResponsable());
-            psd.setString(8, equipo.getDireccionIp());
-            psd.setString(9, equipo.getDireccionMac());
-            psd.setString(10, equipo.getSistemaOperativo());
-            psd.setString(11, equipo.getConfiguracion());
-            psd.setInt(12, equipo.getIdEquipo());
-            int respuesta = psd.executeUpdate();
-            cc.close();
-            if (respuesta > 0) {
-                ok = true;
-                JOptionPane.showMessageDialog(null, "Se actualizo el equipo con ID " + equipo.getIdEquipo());
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontro el equipo");
+        int respuesta;
+        try (Connection cc = new Conexion().conectar()) {
+            if (cc == null) {
+                return false;
+            }
+            cc.setAutoCommit(false);
+            try {
+                Equipo anterior;
+                String consulta = "SELECT * FROM equipo WHERE id_equipo = ? FOR UPDATE";
+                try (PreparedStatement ps = cc.prepareStatement(consulta)) {
+                    ps.setInt(1, equipo.getIdEquipo());
+                    try (ResultSet rs = ps.executeQuery()) {
+                        anterior = rs.next() ? leerEquipo(rs) : null;
+                    }
+                }
+                if (anterior == null) {
+                    cc.rollback();
+                    JOptionPane.showMessageDialog(null, "No se encontró el equipo");
+                    return false;
+                }
+                String sql = "UPDATE equipo SET nombre=?, tipo=?, marca=?, modelo=?, numero_serie=?, "
+                        + "ubicacion=?, responsable=?, direccion_ip=?, direccion_mac=?, "
+                        + "sistema_operativo=?, configuracion=? WHERE id_equipo=?";
+                try (PreparedStatement psd = cc.prepareStatement(sql)) {
+                    psd.setString(1, equipo.getNombre());
+                    psd.setString(2, equipo.getTipo());
+                    psd.setString(3, equipo.getMarca());
+                    psd.setString(4, equipo.getModelo());
+                    psd.setString(5, equipo.getNumeroSerie());
+                    psd.setString(6, equipo.getUbicacion());
+                    psd.setString(7, equipo.getResponsable());
+                    psd.setString(8, equipo.getDireccionIp());
+                    psd.setString(9, equipo.getDireccionMac());
+                    psd.setString(10, equipo.getSistemaOperativo());
+                    psd.setString(11, equipo.getConfiguracion());
+                    psd.setInt(12, equipo.getIdEquipo());
+                    respuesta = psd.executeUpdate();
+                }
+                if (respuesta > 0 && cambioConfiguracion(anterior, equipo)) {
+                    insertHistorialDAO(cc, anterior);
+                }
+                cc.commit();
+            } catch (Exception ex) {
+                try {
+                    cc.rollback();
+                } catch (SQLException errorRollback) {
+                    ex.addSuppressed(errorRollback);
+                }
+                throw ex;
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "No se pudo actualizar el equipo: " + ex.getMessage());
+            return false;
         }
-        return ok;
+        if (respuesta > 0) {
+            JOptionPane.showMessageDialog(null, "Se actualizó el equipo con ID " + equipo.getIdEquipo());
+        }
+        return respuesta > 0;
     }
+
+    private boolean cambioConfiguracion(Equipo antes, Equipo ahora) {
+        return !Objects.equals(antes.getDireccionIp(), ahora.getDireccionIp())
+                || !Objects.equals(antes.getDireccionMac(), ahora.getDireccionMac())
+                || !Objects.equals(antes.getSistemaOperativo(), ahora.getSistemaOperativo())
+                || !Objects.equals(antes.getConfiguracion(), ahora.getConfiguracion());
+    }
+
+    private void insertHistorialDAO(Connection cc, Equipo anterior) throws SQLException {
+        String sql = "INSERT INTO historial_configuracion "
+                + "(id_equipo, direccion_ip, direccion_mac, sistema_operativo, configuracion) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = cc.prepareStatement(sql)) {
+            ps.setInt(1, anterior.getIdEquipo());
+            ps.setString(2, anterior.getDireccionIp());
+            ps.setString(3, anterior.getDireccionMac());
+            ps.setString(4, anterior.getSistemaOperativo());
+            ps.setString(5, anterior.getConfiguracion());
+            ps.executeUpdate();
+        }
+    }
+
+    public List<CambioConfiguracion> selectHistorialDAO(int idEquipo) {
+        List<CambioConfiguracion> lista = new ArrayList<>();
+        String sql = "SELECT h.*, e.nombre FROM historial_configuracion h "
+                + "JOIN equipo e ON e.id_equipo = h.id_equipo"
+                + (idEquipo > 0 ? " WHERE h.id_equipo = ?" : "")
+                + " ORDER BY h.fecha_cambio DESC, h.id_historial DESC";
+        try (Connection cc = new Conexion().conectar()) {
+            if (cc == null) {
+                return lista;
+            }
+            try (PreparedStatement ps = cc.prepareStatement(sql)) {
+                if (idEquipo > 0) {
+                    ps.setInt(1, idEquipo);
+                }
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        lista.add(new CambioConfiguracion(
+                                rs.getInt("id_historial"), rs.getInt("id_equipo"),
+                                rs.getString("nombre"), rs.getString("fecha_cambio"),
+                                rs.getString("direccion_ip"), rs.getString("direccion_mac"),
+                                rs.getString("sistema_operativo"), rs.getString("configuracion")));
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo consultar el historial: " + ex.getMessage());
+        }
+        return lista;
+    }
+
         // ------------------------------------------------------------ DAR DE BAJA
     public boolean bajaEquipoDAO(int idEquipo, String motivo) {
         boolean ok = false;
