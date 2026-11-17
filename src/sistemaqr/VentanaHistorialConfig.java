@@ -10,14 +10,6 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
 
     public VentanaHistorialConfig() {
         initComponents();
-        tabla.setModel(new DefaultTableModel(new String[] {
-            "N.º", "Fecha", "ID equipo", "Equipo", "IP anterior", "MAC anterior", "SO anterior"
-        }, 0) {
-            @Override
-            public boolean isCellEditable(int fila, int columna) {
-                return false;
-            }
-        });
         btnBuscar.addActionListener(e -> buscarPorId());
         btnTodos.addActionListener(e -> verTodos());
         txtId.addActionListener(e -> buscarPorId());
@@ -101,6 +93,14 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
         filtros.add(lblTotal);
         getContentPane().add(filtros, java.awt.BorderLayout.NORTH);
 
+        tabla.setModel(new DefaultTableModel(new String[] {
+            "N.º", "Fecha", "ID equipo", "Equipo", "IP anterior", "MAC anterior", "SO anterior"
+        }, 0) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        });
         tablaScroll.setViewportView(tabla);
         contenido.add(tablaScroll);
         detalle.setEditable(false);
