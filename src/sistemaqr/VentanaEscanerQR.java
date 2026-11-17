@@ -1,0 +1,277 @@
+package sistemaqr;
+
+import com.github.sarxos.webcam.Webcam;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
+public class VentanaEscanerQR extends javax.swing.JFrame {
+
+    // Instancias: CamaraQR, ServicioQR
+    CamaraQR camara = new CamaraQR();
+    ServicioQR servicio = new ServicioQR();
+    List<Webcam> listaCamaras = new ArrayList<>();
+    Timer timer;
+    VentanaEquipos padre;
+
+    public VentanaEscanerQR() {
+        initComponents();
+        CargarCamaras();
+        timer = new Timer(300, e -> LeerCuadro());
+    }
+    public VentanaEscanerQR(VentanaEquipos padre){
+        this();
+        this.padre = padre;
+    }
+    public void CargarCamaras() {
+        listaCamaras = camara.listarCamaras();
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+
+        for (Webcam w : listaCamaras) {
+            modelo.addElement(w.getName());
+        }
+
+        jcbxCamaras.setModel(modelo);
+
+        if (listaCamaras.size() > 1) {
+            jcbxCamaras.setSelectedIndex(listaCamaras.size() - 1);
+        }
+
+        jbtnIniciar.setEnabled(!listaCamaras.isEmpty());
+
+        if (listaCamaras.isEmpty()) {
+            jlblEstado.setText("No se encontró ninguna cámara. Conecte la cámara USB.");
+        }
+
+    }
+
+    public void Detener() {
+        if (timer != null) {
+            timer.stop();
+        }
+        camara.cerrar();
+        jpnlCamara.removeAll();
+        jpnlCamara.revalidate();
+        jpnlCamara.repaint();
+    }
+
+    public void LeerCuadro() {
+        String texto = servicio.leerQR(camara.tomarCuadro());
+        if (texto == null) {
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(texto.trim());
+            EquipoLeido(id);
+        } catch (NumberFormatException ex) {
+            jlblEstado.setText("El QR leído no es de este sistema: " + texto);
+            jlblEstado.setBackground(new Color(255, 220, 160));
+        }
+    }
+
+   public void EquipoLeido(int id) {
+    Toolkit.getDefaultToolkit().beep();
+
+    if (padre != null) {
+        Detener();
+        padre.SeleccionarEquipoPorId(id);
+        dispose();
+    } else {
+        jlblEstado.setText("QR leído: equipo con ID " + id);
+        jlblEstado.setBackground(new Color(190, 235, 190));
+    }
+}
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jcbxCamaras = new javax.swing.JComboBox<>();
+        jbtnIniciar = new javax.swing.JButton();
+        jbtnCancelar = new javax.swing.JButton();
+        jpnlCamara = new javax.swing.JPanel();
+        jlblEstado = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Escanear código QR");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
+
+        jLabel1.setText("ESCANEAR CODIGO QR");
+
+        jLabel3.setText("Cámara:");
+
+        jcbxCamaras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbxCamarasActionPerformed(evt);
+            }
+        });
+
+        jbtnIniciar.setText("Iniciar");
+        jbtnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnIniciarActionPerformed(evt);
+            }
+        });
+
+        jbtnCancelar.setText("Cancelar");
+        jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCancelarActionPerformed(evt);
+            }
+        });
+
+        jpnlCamara.setBorder(javax.swing.BorderFactory.createTitledBorder("Video"));
+        jpnlCamara.setLayout(new java.awt.BorderLayout());
+
+        jlblEstado.setText("         Elija la cámara y presione Iniciar");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(182, 182, 182)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jpnlCamara, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jcbxCamaras, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbtnIniciar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jbtnCancelar))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addComponent(jlblEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(103, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jcbxCamaras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnIniciar)
+                    .addComponent(jbtnCancelar))
+                .addGap(18, 18, 18)
+                .addComponent(jpnlCamara, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlblEstado)
+                .addContainerGap(292, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jcbxCamarasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbxCamarasActionPerformed
+    }//GEN-LAST:event_jcbxCamarasActionPerformed
+
+    private void jbtnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnIniciarActionPerformed
+        int indice = jcbxCamaras.getSelectedIndex();
+
+        if (indice == -1) {
+            JOptionPane.showMessageDialog(this, "No hay ninguna cámara para iniciar");
+        } else if (camara.abrir(listaCamaras.get(indice))) {
+            jpnlCamara.removeAll();
+            jpnlCamara.add(camara.crearPanelVideo(), java.awt.BorderLayout.CENTER);
+            jpnlCamara.revalidate();
+            jbtnIniciar.setEnabled(false);
+            jcbxCamaras.setEnabled(false);
+            jlblEstado.setText("Acerque el código QR del equipo a la cámara");
+            timer.start();
+        }
+    }//GEN-LAST:event_jbtnIniciarActionPerformed
+
+    private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_jbtnCancelarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        Detener();
+    }//GEN-LAST:event_formWindowClosed
+
+    public static void main(String args[]) {
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(VentanaEscanerQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(VentanaEscanerQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(VentanaEscanerQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(VentanaEscanerQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new VentanaEscanerQR().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton jbtnCancelar;
+    private javax.swing.JButton jbtnIniciar;
+    private javax.swing.JComboBox<String> jcbxCamaras;
+    private javax.swing.JLabel jlblEstado;
+    private javax.swing.JPanel jpnlCamara;
+    // End of variables declaration//GEN-END:variables
+}

@@ -1,0 +1,232 @@
+package sistemaqr;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.awt.print.Printable;
+import java.awt.print.PrinterJob;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+public class VentanaEtiquetaQR extends javax.swing.JFrame {
+
+    // Instancias: DAO, ServicioQR
+    DAO dao = new DAO();
+    List<Equipo> listaEquipos = new ArrayList<>();
+
+    ServicioQR servicio = new ServicioQR();
+    BufferedImage etiqueta = null;
+    Equipo equipoActual = null;
+
+    public VentanaEtiquetaQR() {
+        initComponents();
+        CargarEquipos();
+    }
+
+    public void CargarEquipos() {
+        listaEquipos = dao.selectEquiposDAO(false);
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+        modelo.addElement("Seleccione..");
+        for (Equipo e : listaEquipos) {
+            modelo.addElement("ID " + e.getIdEquipo() + " - " + e.getNombre());
+        }
+        jcbxEquipos.setModel(modelo);
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jcbxEquipos = new javax.swing.JComboBox<>();
+        jbtnGenerar = new javax.swing.JButton();
+        jlblEtiqueta = new javax.swing.JLabel();
+        jbtnGuardar = new javax.swing.JButton();
+        jbtnImprimir = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Etiquetas QR");
+
+        jLabel1.setText("Equipo:");
+
+        jbtnGenerar.setText("Generar etiqueta");
+        jbtnGenerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGenerarActionPerformed(evt);
+            }
+        });
+
+        jlblEtiqueta.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlblEtiqueta.setText("Vista previa");
+        jlblEtiqueta.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jbtnGuardar.setText("Guardar PNG");
+        jbtnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGuardarActionPerformed(evt);
+            }
+        });
+
+        jbtnImprimir.setText("Imprimir");
+        jbtnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnImprimirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(470, 470, 470))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jcbxEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(170, 170, 170))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(390, 390, 390)
+                .addComponent(jbtnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(115, 115, 115)
+                .addComponent(jlblEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(290, 290, 290))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(280, 280, 280)
+                .addComponent(jbtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(140, 140, 140))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(456, 456, 456))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jcbxEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(454, 454, 454))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jbtnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(452, 452, 452))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jlblEtiqueta, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(455, 455, 455)
+                .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(455, 455, 455)
+                .addComponent(jbtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGenerarActionPerformed
+        int indice = jcbxEquipos.getSelectedIndex();
+        if (indice <= 0) {
+            JOptionPane.showMessageDialog(null, "Seleccione un equipo");
+        } else {
+            equipoActual = listaEquipos.get(indice - 1);
+            etiqueta = servicio.generarEtiqueta(equipoActual.getIdEquipo(), equipoActual.getNombre());
+            jlblEtiqueta.setText("");
+            jlblEtiqueta.setIcon(new ImageIcon(etiqueta));
+        }
+    }//GEN-LAST:event_jbtnGenerarActionPerformed
+
+    private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
+        if (etiqueta == null) {
+            JOptionPane.showMessageDialog(null, "Primero genere la etiqueta");
+        } else {
+            JFileChooser selector = new JFileChooser();
+            selector.setFileFilter(new FileNameExtensionFilter("Imagen PNG", "png"));
+            selector.setSelectedFile(new File("QR_ID_" + equipoActual.getIdEquipo() + ".png"));
+            if (selector.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File archivo = selector.getSelectedFile();
+                if (!archivo.getName().toLowerCase().endsWith(".png")) {
+                    archivo = new File(archivo.getParentFile(), archivo.getName() + ".png");
+                }
+                if (servicio.guardarPNG(etiqueta, archivo)) {
+                    JOptionPane.showMessageDialog(null, "Etiqueta guardada en:\n" + archivo.getAbsolutePath());
+                }
+            }
+        }
+    }//GEN-LAST:event_jbtnGuardarActionPerformed
+
+    private void jbtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnImprimirActionPerformed
+        if (etiqueta == null) {
+            JOptionPane.showMessageDialog(null, "Primero genere la etiqueta");
+        } else {
+            PrinterJob trabajo = PrinterJob.getPrinterJob();
+            trabajo.setPrintable((grafico, formato, pagina) -> {
+                if (pagina > 0) {
+                    return Printable.NO_SUCH_PAGE;
+                }
+                Graphics2D g = (Graphics2D) grafico;
+                g.translate(formato.getImageableX(), formato.getImageableY());
+                g.drawImage(etiqueta, 0, 0, null);
+                return Printable.PAGE_EXISTS;
+            });
+            if (trabajo.printDialog()) {
+                try {
+                    trabajo.print();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "No se pudo imprimir: " + ex.getMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_jbtnImprimirActionPerformed
+
+    public static void main(String args[]) {
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(VentanaEtiquetaQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(VentanaEtiquetaQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(VentanaEtiquetaQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(VentanaEtiquetaQR.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new VentanaEtiquetaQR().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jbtnGenerar;
+    private javax.swing.JButton jbtnGuardar;
+    private javax.swing.JButton jbtnImprimir;
+    private javax.swing.JComboBox<String> jcbxEquipos;
+    private javax.swing.JLabel jlblEtiqueta;
+    // End of variables declaration//GEN-END:variables
+}

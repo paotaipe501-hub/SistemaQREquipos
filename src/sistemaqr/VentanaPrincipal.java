@@ -1,0 +1,292 @@
+package sistemaqr;
+
+import javax.swing.JOptionPane;
+
+// Menú principal
+public class VentanaPrincipal extends javax.swing.JFrame {
+
+    public VentanaPrincipal() {
+        initComponents();
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+
+    }
+
+    public void abrirVentana(javax.swing.JFrame ventana) {
+        ventana.setLocationRelativeTo(this);
+        ventana.setVisible(true);
+    }
+
+    public void Salir() {
+        int respuesta = JOptionPane.showConfirmDialog(null,
+                "¿Desea salir del sistema?", "Salir", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jlblTitulo = new javax.swing.JLabel();
+        jlblSubtitulo = new javax.swing.JLabel();
+        jlblIntegrantes = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jmnArchivo = new javax.swing.JMenu();
+        jmiSalir = new javax.swing.JMenuItem();
+        jmnEquipos = new javax.swing.JMenu();
+        jmiGestionEquipos = new javax.swing.JMenuItem();
+        jmiEtiquetas = new javax.swing.JMenuItem();
+        jmiHistorialConfig = new javax.swing.JMenuItem();
+        jmnLectura = new javax.swing.JMenu();
+        jmiLecturaCamara = new javax.swing.JMenuItem();
+        jmiLeerImagen = new javax.swing.JMenuItem();
+        jmiHistorial = new javax.swing.JMenuItem();
+        jmnReportes = new javax.swing.JMenu();
+        jmiReporteEquipo = new javax.swing.JMenuItem();
+        jmnAyuda = new javax.swing.JMenu();
+        jmiAcercaDe = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Sistema de Lectura QR - Configuración de Equipos");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        jlblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jlblTitulo.setText("Sistema de Lectura y Procesamiento de Códigos QR");
+
+        jlblSubtitulo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jlblSubtitulo.setText("Configuración de equipos con cámara web USB");
+
+        jlblIntegrantes.setText("Universidad Técnica de Ambato · FISEI · Software · Cuarto A");
+
+        jmnArchivo.setText("Archivo");
+
+        jmiSalir.setText("Salir");
+        jmiSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiSalirActionPerformed(evt);
+            }
+        });
+        jmnArchivo.add(jmiSalir);
+
+        jMenuBar1.add(jmnArchivo);
+
+        jmnEquipos.setText("Equipos");
+
+        jmiGestionEquipos.setText("Gestión de equipos");
+        jmiGestionEquipos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiGestionEquiposActionPerformed(evt);
+            }
+        });
+        jmnEquipos.add(jmiGestionEquipos);
+
+        jmiEtiquetas.setText("Etiquetas QR");
+        jmiEtiquetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiEtiquetasActionPerformed(evt);
+            }
+        });
+        jmnEquipos.add(jmiEtiquetas);
+
+        jmiHistorialConfig.setText("Historial de configuración");
+        jmiHistorialConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiHistorialConfigActionPerformed(evt);
+            }
+        });
+        jmnEquipos.add(jmiHistorialConfig);
+
+        jMenuBar1.add(jmnEquipos);
+
+        jmnLectura.setText("Lectura QR");
+
+        jmiLecturaCamara.setText("Lectura con cámara web");
+        jmiLecturaCamara.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiLecturaCamaraActionPerformed(evt);
+            }
+        });
+        jmnLectura.add(jmiLecturaCamara);
+
+        jmiLeerImagen.setText("Leer QR desde imagen");
+        jmiLeerImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiLeerImagenActionPerformed(evt);
+            }
+        });
+        jmnLectura.add(jmiLeerImagen);
+
+        jmiHistorial.setText("Historial de lecturas");
+        jmiHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiHistorialActionPerformed(evt);
+            }
+        });
+        jmnLectura.add(jmiHistorial);
+
+        jMenuBar1.add(jmnLectura);
+
+        jmnReportes.setText("Reportes");
+
+        jmiReporteEquipo.setText("Reporte de equipo por ID");
+        jmiReporteEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiReporteEquipoActionPerformed(evt);
+            }
+        });
+        jmnReportes.add(jmiReporteEquipo);
+
+        jMenuBar1.add(jmnReportes);
+
+        jmnAyuda.setText("Ayuda");
+        jmnAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmnAyudaActionPerformed(evt);
+            }
+        });
+
+        jmiAcercaDe.setText("Acerca de");
+        jmiAcercaDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiAcercaDeActionPerformed(evt);
+            }
+        });
+        jmnAyuda.add(jmiAcercaDe);
+
+        jMenuBar1.add(jmnAyuda);
+
+        setJMenuBar(jMenuBar1);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jlblTitulo)
+                    .addComponent(jlblSubtitulo)
+                    .addComponent(jlblIntegrantes))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jlblTitulo)
+                .addGap(18, 18, 18)
+                .addComponent(jlblSubtitulo)
+                .addGap(34, 34, 34)
+                .addComponent(jlblIntegrantes)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jmiSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSalirActionPerformed
+        Salir();
+    }//GEN-LAST:event_jmiSalirActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Salir();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jmnAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmnAyudaActionPerformed
+
+    }//GEN-LAST:event_jmnAyudaActionPerformed
+
+    private void jmiAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAcercaDeActionPerformed
+        JOptionPane.showMessageDialog(null,
+                "Sistema de Lectura y Procesamiento de Códigos QR\n"
+                + "para Configuración de Equipos\n\n"
+                + "Integrantes:\n"
+                + "Paola Taipe\nDiana Tituaña\nAlina Ortiz\nJulio Zurita\n\n"
+                + "Universidad Técnica de Ambato - FISEI - Software",
+                "Acerca de", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jmiAcercaDeActionPerformed
+
+    // Instancias de las ventanas
+    private void jmiGestionEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiGestionEquiposActionPerformed
+        abrirVentana(new VentanaEquipos());
+    }//GEN-LAST:event_jmiGestionEquiposActionPerformed
+
+    private void jmiHistorialConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiHistorialConfigActionPerformed
+        abrirVentana(new VentanaHistorialConfig());
+    }//GEN-LAST:event_jmiHistorialConfigActionPerformed
+
+    private void jmiEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiEtiquetasActionPerformed
+        abrirVentana(new VentanaEtiquetaQR());
+    }//GEN-LAST:event_jmiEtiquetasActionPerformed
+
+    private void jmiLecturaCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLecturaCamaraActionPerformed
+        abrirVentana(new VentanaLecturaQR());
+    }//GEN-LAST:event_jmiLecturaCamaraActionPerformed
+
+    private void jmiLeerImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLeerImagenActionPerformed
+        abrirVentana(new VentanaLeerImagenQR());
+    }//GEN-LAST:event_jmiLeerImagenActionPerformed
+
+    private void jmiHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiHistorialActionPerformed
+        abrirVentana(new VentanaHistorial());
+    }//GEN-LAST:event_jmiHistorialActionPerformed
+
+    private void jmiReporteEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiReporteEquipoActionPerformed
+        abrirVentana(new VentanaReporte());
+    }//GEN-LAST:event_jmiReporteEquipoActionPerformed
+
+    public static void main(String args[]) {
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new VentanaPrincipal().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel jlblIntegrantes;
+    private javax.swing.JLabel jlblSubtitulo;
+    private javax.swing.JLabel jlblTitulo;
+    private javax.swing.JMenuItem jmiAcercaDe;
+    private javax.swing.JMenuItem jmiEtiquetas;
+    private javax.swing.JMenuItem jmiHistorialConfig;
+    private javax.swing.JMenuItem jmiGestionEquipos;
+    private javax.swing.JMenuItem jmiHistorial;
+    private javax.swing.JMenuItem jmiLecturaCamara;
+    private javax.swing.JMenuItem jmiLeerImagen;
+    private javax.swing.JMenuItem jmiReporteEquipo;
+    private javax.swing.JMenuItem jmiSalir;
+    private javax.swing.JMenu jmnArchivo;
+    private javax.swing.JMenu jmnAyuda;
+    private javax.swing.JMenu jmnEquipos;
+    private javax.swing.JMenu jmnLectura;
+    private javax.swing.JMenu jmnReportes;
+    // End of variables declaration//GEN-END:variables
+}

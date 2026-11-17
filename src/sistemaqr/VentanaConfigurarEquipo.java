@@ -1,0 +1,271 @@
+package sistemaqr;
+
+import javax.swing.JOptionPane;
+
+public class VentanaConfigurarEquipo extends javax.swing.JFrame {
+
+    // Instancias: DAO
+    DAO dao = new DAO();
+    Equipo equipo = null;
+    VentanaLecturaQR padre;
+
+    public VentanaConfigurarEquipo() {
+        initComponents();
+    }
+
+    public VentanaConfigurarEquipo(int idEquipo) {
+        this();
+        CargarEquipo(idEquipo);
+    }
+
+    public VentanaConfigurarEquipo(int idEquipo, VentanaLecturaQR padre) {
+        this(idEquipo);
+        this.padre = padre;
+    }
+
+    public void CargarEquipo(int idEquipo) {
+        equipo = dao.buscarEquipoDAO(idEquipo);
+
+        if (equipo == null) {
+            JOptionPane.showMessageDialog(null, "No existe un equipo con ID " + idEquipo);
+            jbtnGuardar.setEnabled(false);
+            return;
+        }
+
+        jlblEquipo.setText("Equipo: ID " + equipo.getIdEquipo() + " - " + equipo.getNombre());
+        jtxtIP.setText(equipo.getDireccionIp());
+        jtxtMAC.setText(equipo.getDireccionMac());
+        jtxtSO.setText(equipo.getSistemaOperativo());
+        jtxtaConfiguracion.setText(equipo.getConfiguracion());
+        jtxtaConfiguracion.setCaretPosition(0);
+
+        if (!equipo.isActivo()) {
+            jlblEquipo.setText(jlblEquipo.getText() + " (DADO DE BAJA)");
+            jbtnGuardar.setEnabled(false);
+        }
+    }
+
+    public boolean ValidarConfiguracion() {
+        String ip = jtxtIP.getText().trim();
+        if (!ip.isEmpty() && !ip.matches(
+                "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$")) {
+            JOptionPane.showMessageDialog(this, "La IP no es válida. Ejemplo: 192.168.1.10");
+            jtxtIP.requestFocus();
+            return false;
+        }
+
+        String mac = jtxtMAC.getText().trim();
+        if (!mac.isEmpty() && !mac.matches("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")) {
+            JOptionPane.showMessageDialog(this, "La MAC no es válida. Ejemplo: AA:BB:CC:DD:EE:FF");
+            jtxtMAC.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jlblEquipo = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jtxtIP = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jtxtMAC = new javax.swing.JTextField();
+        jtxtSO = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtxtaConfiguracion = new javax.swing.JTextArea();
+        jbtnGuardar = new javax.swing.JButton();
+        jbtnCancelar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Configurar equipo");
+
+        jLabel1.setText("Configurar equipo");
+
+        jlblEquipo.setText("Equipo;");
+
+        jLabel2.setText("Dirección IP");
+
+        jLabel3.setText("Sist. operativo");
+
+        jLabel4.setText("Configuración");
+
+        jtxtIP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtIPActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("MAC");
+
+        jtxtaConfiguracion.setColumns(20);
+        jtxtaConfiguracion.setRows(5);
+        jScrollPane1.setViewportView(jtxtaConfiguracion);
+
+        jbtnGuardar.setText("Guardar ");
+        jbtnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGuardarActionPerformed(evt);
+            }
+        });
+
+        jbtnCancelar.setText("Cancelar");
+        jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCancelarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(152, 152, 152)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(184, 184, 184)
+                        .addComponent(jlblEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jbtnGuardar)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jtxtIP, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(42, 42, 42)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jtxtMAC, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jtxtSO)
+                                    .addComponent(jScrollPane1)))
+                            .addComponent(jbtnCancelar))))
+                .addContainerGap(52, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlblEquipo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jtxtIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jtxtMAC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jtxtSO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtnGuardar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtnCancelar)
+                .addGap(0, 55, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(155, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jtxtIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtIPActionPerformed
+    }//GEN-LAST:event_jtxtIPActionPerformed
+
+    private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
+        if (equipo != null && ValidarConfiguracion()) {
+            equipo.setDireccionIp(jtxtIP.getText().trim());
+            equipo.setDireccionMac(jtxtMAC.getText().trim().toUpperCase());
+            equipo.setSistemaOperativo(jtxtSO.getText().trim());
+            equipo.setConfiguracion(jtxtaConfiguracion.getText().trim());
+            if (dao.updateEquipoDAO(equipo)) {
+                if (padre != null) {
+                    padre.ActualizarDatos(equipo.getIdEquipo());
+                }
+                dispose();
+            }
+        }
+    }//GEN-LAST:event_jbtnGuardarActionPerformed
+
+    private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_jbtnCancelarActionPerformed
+
+    public static void main(String args[]) {
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(VentanaConfigurarEquipo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(VentanaConfigurarEquipo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(VentanaConfigurarEquipo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(VentanaConfigurarEquipo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new VentanaConfigurarEquipo().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbtnCancelar;
+    private javax.swing.JButton jbtnGuardar;
+    private javax.swing.JLabel jlblEquipo;
+    private javax.swing.JTextField jtxtIP;
+    private javax.swing.JTextField jtxtMAC;
+    private javax.swing.JTextField jtxtSO;
+    private javax.swing.JTextArea jtxtaConfiguracion;
+    // End of variables declaration//GEN-END:variables
+}
