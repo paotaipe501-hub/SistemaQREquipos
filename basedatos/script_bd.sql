@@ -37,11 +37,20 @@ fecha_lectura DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 CONSTRAINT fk_lectura_equipo FOREIGN KEY (id_equipo)
 REFERENCES equipo(id_equipo)
 );
--- Historial de cambios de configuración
+-- Historial de cambios de los equipos: al modificar un equipo se guardan
+-- sus datos ANTERIORES y que campos cambiaron
 CREATE TABLE IF NOT EXISTS historial_configuracion (
     id_historial INT AUTO_INCREMENT PRIMARY KEY,
     id_equipo INT NOT NULL,
     fecha_cambio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    campos_cambiados VARCHAR(255),
+    nombre VARCHAR(100),
+    tipo VARCHAR(40),
+    marca VARCHAR(50),
+    modelo VARCHAR(50),
+    numero_serie VARCHAR(60),
+    ubicacion VARCHAR(100),
+    responsable VARCHAR(100),
     direccion_ip VARCHAR(15),
     direccion_mac VARCHAR(17),
     sistema_operativo VARCHAR(60),
@@ -70,4 +79,4 @@ VALUES
 (4, 'Switch Acceso Piso 2', 'Switch', 'Cisco', 'Catalyst 2960-24TT',
 'FOC1234X5YZ', 'Rack Piso 2', 'Administrador de red', '192.168.99.2',
 '00:1A:2B:3C:4D:04', 'Cisco IOS 15.0',
-'VLAN de gestion: 99\nVLANs: 10, 20, 30\nVTP: Cliente\nSTP: Rapid-PVST\nTroncales: Gi0/1, Gi0/2');
+'VLAN de gestion: 99\nVLANs: 10, 20, 30\nVTP: Cliente\nSTP: Rapid-PVST\nTroncales: Gi0/1, Gi0/2');

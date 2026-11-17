@@ -156,8 +156,9 @@ public class DAO {
                     psd.setInt(12, equipo.getIdEquipo());
                     respuesta = psd.executeUpdate();
                 }
-                if (respuesta > 0 && cambioConfiguracion(anterior, equipo)) {
-                    insertHistorialDAO(cc, anterior);
+                String campos = camposCambiados(anterior, equipo);
+                if (respuesta > 0 && !campos.isEmpty()) {
+                    insertHistorialDAO(cc, anterior, campos);
                 }
                 cc.commit();
             } catch (Exception ex) {
@@ -178,29 +179,55 @@ public class DAO {
         return respuesta > 0;
     }
 
-    private boolean cambioConfiguracion(Equipo antes, Equipo ahora) {
-        return !Objects.equals(antes.getDireccionIp(), ahora.getDireccionIp())
-                || !Objects.equals(antes.getDireccionMac(), ahora.getDireccionMac())
-                || !Objects.equals(antes.getSistemaOperativo(), ahora.getSistemaOperativo())
-                || !Objects.equals(antes.getConfiguracion(), ahora.getConfiguracion());
+    // Devuelve los nombres de los campos que cambiaron, separados por coma ("" si no cambio nada)
+    private String camposCambiados(Equipo antes, Equipo ahora) {
+        List<String> campos = new ArrayList<>();
+        agregarSiCambio(campos, "Nombre", antes.getNombre(), ahora.getNombre());
+        agregarSiCambio(campos, "Tipo", antes.getTipo(), ahora.getTipo());
+        agregarSiCambio(campos, "Marca", antes.getMarca(), ahora.getMarca());
+        agregarSiCambio(campos, "Modelo", antes.getModelo(), ahora.getModelo());
+        agregarSiCambio(campos, "N.º de serie", antes.getNumeroSerie(), ahora.getNumeroSerie());
+        agregarSiCambio(campos, "Ubicación", antes.getUbicacion(), ahora.getUbicacion());
+        agregarSiCambio(campos, "Responsable", antes.getResponsable(), ahora.getResponsable());
+        agregarSiCambio(campos, "IP", antes.getDireccionIp(), ahora.getDireccionIp());
+        agregarSiCambio(campos, "MAC", antes.getDireccionMac(), ahora.getDireccionMac());
+        agregarSiCambio(campos, "Sistema operativo", antes.getSistemaOperativo(), ahora.getSistemaOperativo());
+        agregarSiCambio(campos, "Configuración", antes.getConfiguracion(), ahora.getConfiguracion());
+        return String.join(", ", campos);
     }
 
-    private void insertHistorialDAO(Connection cc, Equipo anterior) throws SQLException {
-        String sql = "INSERT INTO historial_configuracion "
-                + "(id_equipo, direccion_ip, direccion_mac, sistema_operativo, configuracion) VALUES (?, ?, ?, ?, ?)";
+    // null y "" cuentan como iguales (campo vacio)
+    private void agregarSiCambio(List<String> campos, String nombre, String antes, String ahora) {
+        if (!Objects.equals(Objects.toString(antes, ""), Objects.toString(ahora, ""))) {
+            campos.add(nombre);
+        }
+    }
+
+    private void insertHistorialDAO(Connection cc, Equipo anterior, String campos) throws SQLException {
+        String sql = "INSERT INTO historial_configuracion (id_equipo, campos_cambiados, nombre, tipo, marca, modelo, "
+                + "numero_serie, ubicacion, responsable, direccion_ip, direccion_mac, sistema_operativo, configuracion) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = cc.prepareStatement(sql)) {
             ps.setInt(1, anterior.getIdEquipo());
-            ps.setString(2, anterior.getDireccionIp());
-            ps.setString(3, anterior.getDireccionMac());
-            ps.setString(4, anterior.getSistemaOperativo());
-            ps.setString(5, anterior.getConfiguracion());
+            ps.setString(2, campos);
+            ps.setString(3, anterior.getNombre());
+            ps.setString(4, anterior.getTipo());
+            ps.setString(5, anterior.getMarca());
+            ps.setString(6, anterior.getModelo());
+            ps.setString(7, anterior.getNumeroSerie());
+            ps.setString(8, anterior.getUbicacion());
+            ps.setString(9, anterior.getResponsable());
+            ps.setString(10, anterior.getDireccionIp());
+            ps.setString(11, anterior.getDireccionMac());
+            ps.setString(12, anterior.getSistemaOperativo());
+            ps.setString(13, anterior.getConfiguracion());
             ps.executeUpdate();
         }
     }
 
     public List<CambioConfiguracion> selectHistorialDAO(int idEquipo) {
         List<CambioConfiguracion> lista = new ArrayList<>();
-        String sql = "SELECT h.*, e.nombre FROM historial_configuracion h "
+        String sql = "SELECT h.*, e.nombre AS nombre_actual FROM historial_configuracion h "
                 + "JOIN equipo e ON e.id_equipo = h.id_equipo"
                 + (idEquipo > 0 ? " WHERE h.id_equipo = ?" : "")
                 + " ORDER BY h.fecha_cambio DESC, h.id_historial DESC";
@@ -216,9 +243,13 @@ public class DAO {
                     while (rs.next()) {
                         lista.add(new CambioConfiguracion(
                                 rs.getInt("id_historial"), rs.getInt("id_equipo"),
-                                rs.getString("nombre"), rs.getString("fecha_cambio"),
-                                rs.getString("direccion_ip"), rs.getString("direccion_mac"),
-                                rs.getString("sistema_operativo"), rs.getString("configuracion")));
+                                rs.getString("nombre_actual"), rs.getString("fecha_cambio"),
+                                rs.getString("campos_cambiados"), rs.getString("nombre"),
+                                rs.getString("tipo"), rs.getString("marca"), rs.getString("modelo"),
+                                rs.getString("numero_serie"), rs.getString("ubicacion"),
+                                rs.getString("responsable"), rs.getString("direccion_ip"),
+                                rs.getString("direccion_mac"), rs.getString("sistema_operativo"),
+                                rs.getString("configuracion")));
                     }
                 }
             }
@@ -329,4 +360,4 @@ public class DAO {
         }
         return cantidad;
     }
-}
+}

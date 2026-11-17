@@ -45,8 +45,8 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
         cambios = dao.selectHistorialDAO(idEquipo);
         for (CambioConfiguracion cambio : cambios) {
             modelo.addRow(new Object[] {
-                cambio.idHistorial(), cambio.fechaCambio(), cambio.idEquipo(), cambio.nombreEquipo(),
-                cambio.direccionIp(), cambio.direccionMac(), cambio.sistemaOperativo()
+                cambio.idHistorial(), cambio.fechaCambio(), cambio.idEquipo(), cambio.nombreActual(),
+                cambio.camposCambiados(), cambio.nombre(), cambio.direccionIp()
             });
         }
         lblTotal.setText("Cambios: " + cambios.size());
@@ -60,13 +60,25 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
             return;
         }
         CambioConfiguracion cambio = cambios.get(tabla.convertRowIndexToModel(fila));
-        detalle.setText("Equipo: " + cambio.nombreEquipo() + " (ID " + cambio.idEquipo() + ")\n"
+        detalle.setText("Equipo: " + cambio.nombreActual() + " (ID " + cambio.idEquipo() + ")\n"
                 + "Fecha del cambio: " + cambio.fechaCambio() + "\n"
-                + "IP anterior: " + java.util.Objects.toString(cambio.direccionIp(), "") + "\n"
-                + "MAC anterior: " + java.util.Objects.toString(cambio.direccionMac(), "") + "\n"
-                + "Sistema operativo anterior: " + java.util.Objects.toString(cambio.sistemaOperativo(), "")
-                + "\n\nConfiguración anterior\n" + java.util.Objects.toString(cambio.configuracion(), ""));
+                + "Qué cambió: " + texto(cambio.camposCambiados()) + "\n\n"
+                + "DATOS ANTERIORES\n"
+                + "Nombre: " + texto(cambio.nombre()) + "\n"
+                + "Tipo: " + texto(cambio.tipo()) + "\n"
+                + "Marca / Modelo: " + texto(cambio.marca()) + " " + texto(cambio.modelo()) + "\n"
+                + "N.º de serie: " + texto(cambio.numeroSerie()) + "\n"
+                + "Ubicación: " + texto(cambio.ubicacion()) + "\n"
+                + "Responsable: " + texto(cambio.responsable()) + "\n"
+                + "IP: " + texto(cambio.direccionIp()) + "\n"
+                + "MAC: " + texto(cambio.direccionMac()) + "\n"
+                + "Sistema operativo: " + texto(cambio.sistemaOperativo()) + "\n"
+                + "\nConfiguración anterior\n" + texto(cambio.configuracion()));
         detalle.setCaretPosition(0);
+    }
+
+    private String texto(String valor) {
+        return java.util.Objects.toString(valor, "");
     }
 
     @SuppressWarnings("unchecked")
@@ -93,7 +105,7 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
         filtros.add(lblTotal);
 
         tabla.setModel(new DefaultTableModel(new String[] {
-            "N.º", "Fecha", "ID equipo", "Equipo", "IP anterior", "MAC anterior", "SO anterior"
+            "N.º", "Fecha", "ID equipo", "Equipo (actual)", "Qué cambió", "Nombre anterior", "IP anterior"
         }, 0) {
             @Override
             public boolean isCellEditable(int fila, int columna) {
