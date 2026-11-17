@@ -26,13 +26,17 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
     ServicioQR servicio = new ServicioQR();
     List<Webcam> listaCamaras = new ArrayList<>();
     Timer timer;
+    VentanaEquipos padre;
 
     public VentanaEscanerQR() {
         initComponents();
         CargarCamaras();
         timer = new Timer(300, e -> LeerCuadro());
     }
-
+    public VentanaEscanerQR(VentanaEquipos padre){
+        this();
+        this.padre = padre;
+    }
     public void CargarCamaras() {
         listaCamaras = camara.listarCamaras();
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
@@ -80,11 +84,18 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
         }
     }
 
-    public void EquipoLeido(int id) {
-        Toolkit.getDefaultToolkit().beep();
+   public void EquipoLeido(int id) {
+    Toolkit.getDefaultToolkit().beep();
+
+    if (padre != null) {
+        Detener();
+        padre.SeleccionarEquipoPorId(id);
+        dispose();
+    } else {
         jlblEstado.setText("QR leído: equipo con ID " + id);
         jlblEstado.setBackground(new Color(190, 235, 190));
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -221,17 +232,17 @@ public class VentanaEscanerQR extends javax.swing.JFrame {
         // TODO add your handling code here:
         int indice = jcbxCamaras.getSelectedIndex();
 
-if (indice == -1) {
-    JOptionPane.showMessageDialog(this, "No hay ninguna cámara para iniciar");
-} else if (camara.abrir(listaCamaras.get(indice))) {
-    jpnlCamara.removeAll();
-    jpnlCamara.add(camara.crearPanelVideo(), java.awt.BorderLayout.CENTER);
-    jpnlCamara.revalidate();
-    jbtnIniciar.setEnabled(false);
-    jcbxCamaras.setEnabled(false);
-    jlblEstado.setText("Acerque el código QR del equipo a la cámara");
-    timer.start();
-}
+        if (indice == -1) {
+            JOptionPane.showMessageDialog(this, "No hay ninguna cámara para iniciar");
+        } else if (camara.abrir(listaCamaras.get(indice))) {
+            jpnlCamara.removeAll();
+            jpnlCamara.add(camara.crearPanelVideo(), java.awt.BorderLayout.CENTER);
+            jpnlCamara.revalidate();
+            jbtnIniciar.setEnabled(false);
+            jcbxCamaras.setEnabled(false);
+            jlblEstado.setText("Acerque el código QR del equipo a la cámara");
+            timer.start();
+        }
     }//GEN-LAST:event_jbtnIniciarActionPerformed
 
     private void jbtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarActionPerformed
@@ -241,7 +252,7 @@ if (indice == -1) {
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
-         Detener();
+        Detener();
     }//GEN-LAST:event_formWindowClosed
 
     /**
