@@ -4,17 +4,49 @@
  */
 package sistemaqr;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author USER11
  */
 public class VentanaConfigurarEquipo extends javax.swing.JFrame {
 
+    DAO dao = new DAO();
+    Equipo equipo = null;
+
     /**
      * Creates new form VentanaConfigurarEquipo
      */
     public VentanaConfigurarEquipo() {
         initComponents();
+    }
+
+    public VentanaConfigurarEquipo(int idEquipo) {
+        this();
+        CargarEquipo(idEquipo);
+    }
+
+    public void CargarEquipo(int idEquipo) {
+        equipo = dao.buscarEquipoDAO(idEquipo);
+
+        if (equipo == null) {
+            JOptionPane.showMessageDialog(null, "No existe un equipo con ID " + idEquipo);
+            jbtnGuardar.setEnabled(false);
+            return;
+        }
+
+        jlblEquipo.setText("Equipo: ID " + equipo.getIdEquipo() + " - " + equipo.getNombre());
+        jtxtIP.setText(equipo.getDireccionIp());
+        jtxtMAC.setText(equipo.getDireccionMac());
+        jtxtSO.setText(equipo.getSistemaOperativo());
+        jtxtaConfiguracion.setText(equipo.getConfiguracion());
+        jtxtaConfiguracion.setCaretPosition(0);
+
+        if (!equipo.isActivo()) {
+            jlblEquipo.setText(jlblEquipo.getText() + " (DADO DE BAJA)");
+            jbtnGuardar.setEnabled(false);
+        }
     }
 
     /**
