@@ -91,7 +91,6 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
         filtros.add(btnBuscar);
         filtros.add(btnTodos);
         filtros.add(lblTotal);
-        getContentPane().add(filtros, java.awt.BorderLayout.NORTH);
 
         tabla.setModel(new DefaultTableModel(new String[] {
             "N.º", "Fecha", "ID equipo", "Equipo", "IP anterior", "MAC anterior", "SO anterior"
@@ -109,7 +108,14 @@ public class VentanaHistorialConfig extends javax.swing.JFrame {
         detalle.setWrapStyleWord(true);
         detalleScroll.setViewportView(detalle);
         contenido.add(detalleScroll);
-        getContentPane().add(contenido, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(filtros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(contenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addComponent(filtros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(contenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         pack();
     }//GEN-END:initComponents
 
