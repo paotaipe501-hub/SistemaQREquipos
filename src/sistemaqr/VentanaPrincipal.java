@@ -1,4 +1,4 @@
-package sistemaqr;
+ package sistemaqr;
 
 import javax.swing.JOptionPane;
 

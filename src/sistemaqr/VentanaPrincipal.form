@@ -42,7 +42,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jmiHistorialConfig">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Historial de configuración"/>
+                <Property name="text" type="java.lang.String" value="Historial de configuraci&#xf3;n"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiHistorialConfigActionPerformed"/>
